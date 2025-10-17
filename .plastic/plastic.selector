@@ -1,3 +1,4 @@
 repository "Assignment2Game/Assignment2Game@17867148275837@cloud"
   path "/"
-    smartbranch "/main"
+    br "/main"
+    co "/main"
