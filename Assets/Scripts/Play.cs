@@ -7,6 +7,7 @@ public class Play : MonoBehaviour
 {
     private GameObject blackFaderMenu, blackFaderPanel, mainMenu;
     private const float interim_delay = 1f;
+    private const float fade_duration = 1f;
 
     void Start()
     {
@@ -30,14 +31,14 @@ public class Play : MonoBehaviour
         Image faderImage = blackFaderPanel.GetComponent<Image>();
 
         // Fade in
-        yield return StartCoroutine(Fade(faderImage, 0f, 1f, 1f));
+        yield return StartCoroutine(Fade(faderImage, 0f, 1f, fade_duration));
 
         // Wait
         ToggleMenu(mainMenu, false);
         yield return new WaitForSeconds(interim_delay);
 
         // Fade out
-        yield return StartCoroutine(Fade(faderImage, 1f, 0f, 1f));
+        yield return StartCoroutine(Fade(faderImage, 1f, 0f, fade_duration));
 
         ToggleMenu(blackFaderMenu, false, true);
         ToggleMenu(mainMenu, false, true);
