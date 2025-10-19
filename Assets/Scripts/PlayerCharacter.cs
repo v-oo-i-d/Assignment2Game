@@ -26,7 +26,6 @@ public class PlayerCharacter : MonoBehaviour
         // Set Velocity to (0,0,0)
         mVelocity = Vector3.zero;
 
-        mCamera = transform.Find("Player Camera");
         // mCamera = transform.Find("Player Camera");
 
         mMoveAction = InputSystem.actions.FindAction("Move");
