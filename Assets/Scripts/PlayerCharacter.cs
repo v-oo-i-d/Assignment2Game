@@ -88,8 +88,13 @@ public class PlayerCharacter : MonoBehaviour
             // Accelerate Character due to Gravity
             mVelocity.y += Physics.gravity.y * Time.deltaTime;
         }
-        
+
         // Move Character
         mController.Move(mVelocity * Time.deltaTime);
+    }
+    
+    public void AbsorbPower()
+    {
+        Debug.Log("Absorb Power");
     }
 }

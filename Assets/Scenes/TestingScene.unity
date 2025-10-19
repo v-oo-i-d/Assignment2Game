@@ -556,12 +556,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61e1f3ac28dafb947a09e3b0281ea6c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mVelocity: {x: 0, y: 0, z: 0}
-  mLanded: 1
-  mJump: 0
   WalkSpeed: 1.894965
   Acceleration: 5
   JumpSpeed: 5
+  MouseSensitivity: 0.5
 --- !u!143 &1449442642
 CharacterController:
   m_ObjectHideFlags: 0
@@ -596,11 +594,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1911228325}
+  - component: {fileID: 1911228326}
   - component: {fileID: 1911228324}
   - component: {fileID: 1911228323}
   - component: {fileID: 1911228322}
   m_Layer: 0
-  m_Name: RedPower
+  m_Name: RedPowerOrb
   m_TagString: PowerOrb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -695,6 +694,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1911228326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1911228321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38428325e7c333c4f86da251693feac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1921379370
 GameObject:
   m_ObjectHideFlags: 0
