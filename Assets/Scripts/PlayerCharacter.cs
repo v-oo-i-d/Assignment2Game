@@ -1,20 +1,22 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(CharacterController))]
 public class PlayerCharacter : MonoBehaviour
 {
     private CharacterController mController;
-    public Vector3 mVelocity;
-    private Transform mCamera;
-    public bool mLanded = true;
-    public bool mJump = false;
+    private Vector3 mVelocity;
+    // private Transform mCamera;
+    private bool mLanded = true;
+    // private bool mJump = false;
 
     private InputAction mMoveAction, mLookAction, mJumpAction;
 
     // Feel free to change these values
-    public float WalkSpeed = 1.894965f;
+    public float WalkSpeed = 5.0f;
     public float Acceleration = 5.0f;
     public float JumpSpeed = 5.0f;
+    public float MouseSensitivity = .5f;
 
     void Start()
     {
@@ -24,7 +26,7 @@ public class PlayerCharacter : MonoBehaviour
         // Set Velocity to (0,0,0)
         mVelocity = Vector3.zero;
 
-        mCamera = transform.Find("Player Camera");
+        // mCamera = transform.Find("Player Camera");
 
         mMoveAction = InputSystem.actions.FindAction("Move");
         mLookAction = InputSystem.actions.FindAction("Look");
@@ -42,11 +44,11 @@ public class PlayerCharacter : MonoBehaviour
 
     void Update()
     {
-        Vector2 look = mLookAction.ReadValue<Vector2>();
+        Vector2 look = mLookAction.ReadValue<Vector2>().normalized * MouseSensitivity;
 
         // Look left/right
-        mCamera.Rotate(Vector3.up, look.x, Space.World);
-        mCamera.Rotate(Vector3.right, -look.y, Space.Self);
+        transform.Rotate(Vector3.up, look.x, Space.World);
+        transform.Rotate(Vector3.right, -look.y, Space.Self);
 
         // Modify movement speed - Walking, Running
         float moveModifier = WalkSpeed;
