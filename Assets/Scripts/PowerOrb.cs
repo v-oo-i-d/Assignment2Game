@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class PowerOrb : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public string colour;
+    
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -18,7 +18,7 @@ public class PowerOrb : MonoBehaviour
         // If Player collides with a Power Orb
         if (collider.CompareTag("Player"))
         {
-            collider.GetComponent<PlayerCharacter>().AbsorbPower();
+            collider.GetComponent<PlayerCharacter>().AbsorbPower(colour);
         }
     }
 }

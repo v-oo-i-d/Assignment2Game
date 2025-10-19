@@ -1,3 +1,5 @@
+using System.Diagnostics.Tracing;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -93,8 +95,19 @@ public class PlayerCharacter : MonoBehaviour
         mController.Move(mVelocity * Time.deltaTime);
     }
     
-    public void AbsorbPower()
+    public void AbsorbPower(string colour)
     {
-        Debug.Log("Absorb Power");
+        switch (colour)
+        {
+            case "Red":
+                Debug.Log("Absorb Red");
+                break;
+            case "Yellow":
+                Debug.Log("Absorb Yellow");
+                break;
+            case "Blue":
+                Debug.Log("Absorb Blue");
+                break;
+        }
     }
 }
