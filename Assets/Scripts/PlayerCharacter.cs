@@ -11,7 +11,7 @@ public class PlayerCharacter : MonoBehaviour
 
     private InputAction mMoveAction, mLookAction, mJumpAction;
 
-    //Feel free to change these values
+    // Feel free to change these values
     public float WalkSpeed = 1.894965f;
     public float Acceleration = 5.0f;
     public float JumpSpeed = 5.0f;
@@ -49,18 +49,14 @@ public class PlayerCharacter : MonoBehaviour
         mCamera.Rotate(Vector3.right, -look.y, Space.Self);
 
         // Modify movement speed - Walking, Running
-        float moveModifier = 0;
-        
-        // Player Walking
-        moveModifier = WalkSpeed;
+        float moveModifier = WalkSpeed;
 
         Vector2 move = mMoveAction.ReadValue<Vector2>();
 
         // Calculate target velocity on xz plane
-        Vector3 targetVelocity = Vector3.zero;
-        targetVelocity = (transform.forward * move.y +
-                          transform.right * move.x) *
-                          moveModifier;
+        Vector3 targetVelocity = (
+            transform.forward * move.y +
+            transform.right * move.x) * moveModifier;
 
         // Update Velocity
         mVelocity.z = Mathf.MoveTowards(mVelocity.z, targetVelocity.z, Acceleration * Time.deltaTime);
