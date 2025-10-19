@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 28
-  productGUID: f28b7def55847ca44b7af8fa3d4bf7b9
+  productGUID: 0b482b8c67cca5c4681a9bb4b9becc68
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: A2_Real
+  productName: Assignment2Game
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -838,14 +838,14 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: A2_Real
+  metroPackageName: Assignment2Game
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: A2_Real
+  metroApplicationDescription: Assignment2Game
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -916,10 +916,10 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: adedb7a5-4700-411b-af48-884505432d92
+  cloudProjectId: 0baa9fa5-41d8-454d-860c-fd9bfde6494f
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: A2_Real
+  projectName: Assignment2Game
   organizationId: michalegraham
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
