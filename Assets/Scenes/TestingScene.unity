@@ -560,7 +560,6 @@ MonoBehaviour:
   mLanded: 1
   mJump: 0
   WalkSpeed: 1.894965
-  SprintSpeed: 4.922
   Acceleration: 5
   JumpSpeed: 5
 --- !u!143 &1449442642
@@ -690,7 +689,7 @@ Transform:
   m_GameObject: {fileID: 1921379370}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.36, y: 0.62, z: 5.41}
+  m_LocalPosition: {x: 1, y: 0.62, z: 5.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
