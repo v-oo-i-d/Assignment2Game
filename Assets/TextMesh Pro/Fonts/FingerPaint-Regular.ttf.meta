@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 41d3c942f8eee2b4d930d579dd94347e
+guid: 486838524b183224ca82e8203be464db
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Knewave
+  - Finger Paint
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
