@@ -1,16 +1,23 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PowerObject : MonoBehaviour
 {
+    private InputAction mAbsorbAction;
     ColourChanger colourChanger;
+
     void Start()
     {
+        mAbsorbAction = InputSystem.actions.FindAction("Absorb");
         colourChanger = GetComponentInChildren<ColourChanger>();
     }
     
     void Update()
     {
-        
+        if (mAbsorbAction.WasPerformedThisFrame())
+        {
+            Debug.Log("Absorb Pressed");
+        }
     }
 
     void OnTriggerEnter(Collider collider)
