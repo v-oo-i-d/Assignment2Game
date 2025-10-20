@@ -7,13 +7,13 @@ public class ColourChanger : MonoBehaviour
     public Color startingColour;
     public Color fadedColour;
     private Color currentColour;
-    public bool faded;
+    public bool faded, absorbable;
     private float fadeTime; //How long before the colour changes fully
     Renderer objectRenderer;
     
     void Start()
     {
-        faded = false;
+        absorbable = true;
         fadedColour = Color.gray;
         fadeTime = 2.0f;
         currentColour = startingColour;
@@ -23,11 +23,12 @@ public class ColourChanger : MonoBehaviour
 
     void Update()
     {
-
+        
     }
     
     public IEnumerator FadeToColour(Color colourChange)
     {
+        absorbable = false;
         float currentTime = 0f;
         while (currentTime < fadeTime)
         {
@@ -36,5 +37,17 @@ public class ColourChanger : MonoBehaviour
             yield return null; // Wait for the next frame
         }
         objectRenderer.material.color = colourChange; // Ensure the final color is set
+        currentColour = colourChange;
+
+        faded = (currentColour != startingColour);
+        if (faded)
+        {
+            StartCoroutine(FadeToColour(startingColour));
+        }
+
+        if (currentColour == startingColour)
+        {
+            absorbable = true;
+        }
     }
 }
