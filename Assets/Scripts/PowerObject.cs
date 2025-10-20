@@ -21,4 +21,5 @@ public class PowerOrb : MonoBehaviour
             collider.GetComponent<PlayerCharacter>().AbsorbPower(colour);
         }
     }
+    
 }
