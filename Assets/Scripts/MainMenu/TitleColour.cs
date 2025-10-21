@@ -10,7 +10,7 @@ public class TitleColour : MonoBehaviour
     private TextMeshProUGUI titleText; 
     private Image underline;
 
-    void Awake()
+    void Start()
     {
         titleText = GetComponent<TextMeshProUGUI>();
         underline = transform.Find("Underline").transform.GetComponent<Image>();
