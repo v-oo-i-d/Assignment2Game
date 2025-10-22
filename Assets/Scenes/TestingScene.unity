@@ -957,7 +957,7 @@ MonoBehaviour:
   WalkSpeed: 7
   Acceleration: 75
   JumpSpeed: 9
-  MouseSensitivity: 0.5
+  MouseSensitivity: 0.2
   MaxLookAngle: 89
   Gravity: -35
 --- !u!143 &1449442642

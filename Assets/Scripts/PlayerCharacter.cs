@@ -19,7 +19,7 @@ public class PlayerCharacter : MonoBehaviour
     public float WalkSpeed = 7.0f;
     public float Acceleration = 75.0f;
     public float JumpSpeed = 9.0f;
-    public float MouseSensitivity = .4f;
+    public float MouseSensitivity = .2f;
     public float MaxLookAngle = 89f;
     public float Gravity = -35f;
 
@@ -55,7 +55,7 @@ public class PlayerCharacter : MonoBehaviour
 
     private void HandleLook()
     {
-        Vector2 look = mLookAction.ReadValue<Vector2>().normalized * MouseSensitivity;
+        Vector2 look = mLookAction.ReadValue<Vector2>() * MouseSensitivity;
 
         cameraPitch -= look.y;
         cameraPitch = Mathf.Clamp(cameraPitch, -MaxLookAngle, MaxLookAngle);
