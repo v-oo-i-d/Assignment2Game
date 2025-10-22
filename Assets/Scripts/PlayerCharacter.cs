@@ -10,8 +10,6 @@ public class PlayerCharacter : MonoBehaviour
     private Vector3 mVelocity;
     private Transform mCamera;
     private float cameraPitch = 0f;
-    // private bool mLanded = true;
-    // private bool mJump = false;
 
     private InputAction mMoveAction, mLookAction, mJumpAction;
 
@@ -63,7 +61,7 @@ public class PlayerCharacter : MonoBehaviour
 
         transform.Rotate(Vector3.up * look.x);
     }
-    
+
     private void HandleMovement()
     {
         Vector2 move = mMoveAction.ReadValue<Vector2>();
@@ -83,6 +81,8 @@ public class PlayerCharacter : MonoBehaviour
 
         mController.Move(mVelocity * Time.deltaTime);
     }
+    
+    public Vector3 GetVelocity() => mVelocity;
 
     public void AbsorbPower(string colour)
     {
