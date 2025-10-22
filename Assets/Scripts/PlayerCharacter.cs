@@ -8,27 +8,29 @@ public class PlayerCharacter : MonoBehaviour
 {
     private CharacterController mController;
     private Vector3 mVelocity;
-    // private Transform mCamera;
-    private bool mLanded = true;
+    private Transform mCamera;
+    private float cameraPitch = 0f;
+    // private bool mLanded = true;
     // private bool mJump = false;
 
     private InputAction mMoveAction, mLookAction, mJumpAction;
 
     // Feel free to change these values
-    public float WalkSpeed = 5.0f;
-    public float Acceleration = 5.0f;
-    public float JumpSpeed = 5.0f;
-    public float MouseSensitivity = .5f;
+    public float WalkSpeed = 7.0f;
+    public float Acceleration = 75.0f;
+    public float JumpSpeed = 9.0f;
+    public float MouseSensitivity = .4f;
+    public float MaxLookAngle = 89f;
+    public float Gravity = -35f;
 
     void Start()
     {
         mController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
 
-        // Set Velocity to (0,0,0)
         mVelocity = Vector3.zero;
 
-        // mCamera = transform.Find("Player Camera");
+        mCamera = transform.Find("Player Camera");
 
         mMoveAction = InputSystem.actions.FindAction("Move");
         mLookAction = InputSystem.actions.FindAction("Look");
@@ -37,64 +39,51 @@ public class PlayerCharacter : MonoBehaviour
 
     private void Jump()
     {
-        // Make character jump up
-        mVelocity.y = JumpSpeed;
-
-        // Player is no longer landed
-        mLanded = false;
+        if (mController.isGrounded)
+        {
+            mVelocity.y = JumpSpeed;
+        }
     }
 
     void Update()
     {
+        HandleLook();
+        HandleMovement();
+
+        if (mJumpAction.WasPerformedThisFrame()) Jump();
+    }
+
+    private void HandleLook()
+    {
         Vector2 look = mLookAction.ReadValue<Vector2>().normalized * MouseSensitivity;
 
-        // Look left/right
-        transform.Rotate(Vector3.up, look.x, Space.World);
-        transform.Rotate(Vector3.right, -look.y, Space.Self);
+        cameraPitch -= look.y;
+        cameraPitch = Mathf.Clamp(cameraPitch, -MaxLookAngle, MaxLookAngle);
+        mCamera.localEulerAngles = new Vector3(cameraPitch, 0f, 0f);
 
-        // Modify movement speed - Walking, Running
-        float moveModifier = WalkSpeed;
-
-        Vector2 move = mMoveAction.ReadValue<Vector2>();
-
-        // Calculate target velocity on xz plane
-        Vector3 targetVelocity = (
-            transform.forward * move.y +
-            transform.right * move.x) * moveModifier;
-
-        // Update Velocity
-        mVelocity.z = Mathf.MoveTowards(mVelocity.z, targetVelocity.z, Acceleration * Time.deltaTime);
-        mVelocity.x = Mathf.MoveTowards(mVelocity.x, targetVelocity.x, Acceleration * Time.deltaTime);
-
-        if (mController.isGrounded)
-        {
-            // Set Velocity -2 (keep player on the ground)
-            mVelocity.y = -2f;
-
-            // User Pressed Space
-            if (mJumpAction.WasPerformedThisFrame())
-            {
-                // Make Character Jump
-                Jump();
-            }
-
-            // If Player has just Landed
-            if (mLanded == false)
-            {
-                // Player has landed
-                mLanded = true;
-            }
-        }
-        else
-        {
-            // Accelerate Character due to Gravity
-            mVelocity.y += Physics.gravity.y * Time.deltaTime;
-        }
-
-        // Move Character
-        mController.Move(mVelocity * Time.deltaTime);
+        transform.Rotate(Vector3.up * look.x);
     }
     
+    private void HandleMovement()
+    {
+        Vector2 move = mMoveAction.ReadValue<Vector2>();
+        Vector3 targetVelocity = (transform.forward * move.y + transform.right * move.x) * WalkSpeed;
+
+        // Accelerate
+        Vector3 currentHorizontal = new(mVelocity.x, 0f, mVelocity.z);
+        Vector3 targetHorizontal = new(targetVelocity.x, 0f, targetVelocity.z);
+        currentHorizontal = Vector3.MoveTowards(currentHorizontal, targetHorizontal, Acceleration * Time.deltaTime);
+
+        mVelocity.x = currentHorizontal.x;
+        mVelocity.z = currentHorizontal.z;
+
+        // Apply gravity
+        if (mController.isGrounded && mVelocity.y < 0) mVelocity.y = -2f;
+        mVelocity.y += Gravity * Time.deltaTime;
+
+        mController.Move(mVelocity * Time.deltaTime);
+    }
+
     public void AbsorbPower(string colour)
     {
         switch (colour)
