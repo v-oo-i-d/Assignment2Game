@@ -527,9 +527,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerColour: Red
-  startingColour: {r: 1, g: 0, b: 0, a: 1}
+  originalColour: {r: 1, g: 0, b: 0, a: 0}
   fadedColour: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  changeStartingColor: {r: 1, g: 0, b: 0, a: 0}
   faded: 0
+  absorbable: 0
 --- !u!1 &581435881
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,9 +671,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerColour: Yellow
-  startingColour: {r: 1, g: 1, b: 0, a: 1}
+  originalColour: {r: 1, g: 1, b: 0, a: 0}
   fadedColour: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  changeStartingColor: {r: 1, g: 1, b: 0, a: 0}
   faded: 0
+  absorbable: 0
 --- !u!1 &1191112282 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -286848006815571939, guid: 429cfd43e3a4eb347bfbce5d74a2ee29, type: 3}
@@ -690,9 +694,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   powerColour: Blue
-  startingColour: {r: 0, g: 0, b: 1, a: 1}
+  originalColour: {r: 0, g: 0, b: 1, a: 0}
   fadedColour: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  changeStartingColor: {r: 0, g: 0, b: 1, a: 0}
   faded: 0
+  absorbable: 0
 --- !u!1001 &1389588393
 PrefabInstance:
   m_ObjectHideFlags: 0
