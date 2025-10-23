@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
@@ -9,7 +8,10 @@ public class PowerObject : MonoBehaviour
     ColourChanger colourChanger;
     PlayerCharacter player;
     private bool insideAbsorbZone, absorbing, resetColour;
-    float currentTime, fadeTime; 
+    float currentTime, fadeTime;
+    public event System.Action OnPlayerLeft;
+    public event System.Action OnPlayerNearby;
+
 
     void Start()
     {
@@ -32,7 +34,10 @@ public class PowerObject : MonoBehaviour
 
     void AbsorbingProcess()
     {
-        if (!insideAbsorbZone) { return; }
+        if (!insideAbsorbZone) {
+            return;
+        }
+
 
         if (mAbsorbAction.WasPressedThisFrame() && colourChanger.absorbable)
         {
@@ -42,6 +47,7 @@ public class PowerObject : MonoBehaviour
         }
 
         if (!absorbing) { return; }
+
 
         if (mAbsorbAction.IsPressed() && currentTime < fadeTime)
         {
@@ -95,6 +101,7 @@ public class PowerObject : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             insideAbsorbZone = true;
+            OnPlayerNearby.Invoke();
         }
     }
 
@@ -106,6 +113,7 @@ public class PowerObject : MonoBehaviour
             interruptedAbsorbing();
             resetColour = absorbing;
             absorbing = false;
+            OnPlayerLeft.Invoke();
         }
     }
 }
