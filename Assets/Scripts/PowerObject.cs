@@ -34,11 +34,11 @@ public class PowerObject : MonoBehaviour
 
     void AbsorbingProcess()
     {
-        if (!insideAbsorbZone) {
+        if (!insideAbsorbZone)
+        {
             return;
         }
-
-
+        
         if (mAbsorbAction.WasPressedThisFrame() && colourChanger.absorbable)
         {
             absorbing = true;
@@ -47,8 +47,7 @@ public class PowerObject : MonoBehaviour
         }
 
         if (!absorbing) { return; }
-
-
+        
         if (mAbsorbAction.IsPressed() && currentTime < fadeTime)
         {
             colourChanger.FadeToColour(colourChanger.fadedColour, currentTime, fadeTime);
@@ -110,7 +109,7 @@ public class PowerObject : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             insideAbsorbZone = false;
-            interruptedAbsorbing();
+            if (absorbing) { interruptedAbsorbing(); }
             resetColour = absorbing;
             absorbing = false;
             OnPlayerLeft.Invoke();
