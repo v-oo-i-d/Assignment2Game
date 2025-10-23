@@ -937,7 +937,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38428325e7c333c4f86da251693feac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prompt: {fileID: 0}
 --- !u!135 &461247767
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2582,7 +2581,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38428325e7c333c4f86da251693feac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prompt: {fileID: 0}
 --- !u!135 &1389588398
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2723,7 +2721,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38428325e7c333c4f86da251693feac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prompt: {fileID: 0}
 --- !u!135 &1397533933
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2979,6 +2976,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1624040192}
+  - component: {fileID: 1624040193}
   m_Layer: 0
   m_Name: AbsorbPrompt
   m_TagString: Untagged
@@ -3002,6 +3000,18 @@ Transform:
   - {fileID: 408688818}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1624040193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1624040191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c4c5244b61e4d1aa33d2b2107604a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1659322618
 GameObject:
   m_ObjectHideFlags: 0
