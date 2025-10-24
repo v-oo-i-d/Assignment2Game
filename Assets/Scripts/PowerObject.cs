@@ -38,7 +38,7 @@ public class PowerObject : MonoBehaviour
         {
             return;
         }
-        
+
         if (mAbsorbAction.WasPressedThisFrame() && colourChanger.absorbable)
         {
             absorbing = true;
@@ -95,12 +95,29 @@ public class PowerObject : MonoBehaviour
         currentTime = 0f;
     }
 
-    void OnTriggerEnter(Collider collider)
+    /*void OnTriggerEnter(Collider collider)
     {
         if (collider.CompareTag("Player"))
         {
             insideAbsorbZone = true;
-            OnPlayerNearby.Invoke();
+        }
+    }*/
+
+    void OnTriggerStay(Collider other)
+    {
+
+        if (other.CompareTag("Player"))
+        {
+            Vector3 direction = (transform.position - player.GetComponentInChildren<Camera>().transform.position).normalized;
+            if (Vector3.Dot(direction, player.GetComponentInChildren<Camera>().transform.forward) < 0.8)
+            {
+                insideAbsorbZone = false;
+                OnPlayerLeft.Invoke();
+            }else
+            {
+                insideAbsorbZone = true;
+                OnPlayerNearby.Invoke();
+            }
         }
     }
 
