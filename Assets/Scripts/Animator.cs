@@ -12,28 +12,21 @@ public class PlayerAnimator : MonoBehaviour
         // Set animation speed multipliers based on player movement speed
         mAnimator.SetFloat("MoonwalkMultiplier", playerMoveSpeed * 0.243f);
         mAnimator.SetFloat("WalkMultiplier", playerMoveSpeed * 0.243f);
-        mAnimator.SetFloat("StrafeMultiplier", playerMoveSpeed * 0.3f);
+        mAnimator.SetFloat("StrafeMultiplier", playerMoveSpeed * 0.5f);
     }
 
     void Update()
     {
-        Vector3 playerVelocity = GetComponent<PlayerCharacter>().GetVelocity();
+        // Vector3 playerVelocity = GetComponent<PlayerCharacter>().GetVelocity();
         
-        // Horizontal movement only
-        float velMag = new Vector3(playerVelocity.x, 0, playerVelocity.z).magnitude;
-        float forwardVelocity = 0f; // forwards and backwards
-        float sidewaysVelocity = 0f; // side to side
+        float inputX = Input.GetAxisRaw("Horizontal");  // A/D or Left/Right
+        float inputZ = Input.GetAxisRaw("Vertical");    // W/S or Up/Down
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-            forwardVelocity = velMag;
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-            forwardVelocity = -velMag;
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-            sidewaysVelocity = velMag;
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-            sidewaysVelocity = -velMag;
+        Vector3 playerVelocity = GetComponent<PlayerCharacter>().GetVelocity();
+        float speed = new Vector3(playerVelocity.x, 0, playerVelocity.z).magnitude;
 
-        mAnimator.SetFloat("ForwardVelocity", forwardVelocity);
-        mAnimator.SetFloat("SidewaysVelocity", sidewaysVelocity);
+        mAnimator.SetFloat("ForwardVelocity", inputZ * speed);
+        mAnimator.SetFloat("SidewaysVelocity", inputX * speed);
+        Debug.Log(mAnimator.GetFloat("SidewaysVelocity"));
     }
 }
