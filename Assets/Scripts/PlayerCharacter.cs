@@ -33,12 +33,6 @@ public class PlayerCharacter : MonoBehaviour
     [Header("Jump Power Settings")]
     public float y;
 
-    [Header("Player Colours")]
-    public Material BlueMaterial;
-    public Material RedMaterial;
-    public Material YellowMaterial; 
-    public Material DefaultMaterial;
-
     void Start()
     {
         mController = GetComponent<CharacterController>();
@@ -106,60 +100,15 @@ public class PlayerCharacter : MonoBehaviour
     {
         switch (colour)
         {
-            case "Red": StartCoroutine(AbsorbRed()); break;
-            case "Yellow": StartCoroutine(AbsorbYellow()); break;
-            case "Blue": StartCoroutine(AbsorbBlue()); break;
+            case "Red":
+                StartCoroutine(Powers.Red(this)); 
+                break;
+            case "Yellow":
+                StartCoroutine(Powers.Yellow(this)); 
+                break;
+            case "Blue":
+                StartCoroutine(Powers.Blue(this)); 
+                break;
         }
-    }
-
-    private IEnumerator AbsorbRed()
-    {
-        yield return null;
-    }
-
-    private IEnumerator AbsorbYellow()
-    {
-        Camera cam = mCamera.GetComponent<Camera>();
-        SkinnedMeshRenderer renderer = transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
-
-        // Set character model colour
-        if (YellowMaterial != null)
-            renderer.material = YellowMaterial;
-
-        // Store original values
-        float originalSpeed = WalkSpeed;
-        float originalFOV = cam.fieldOfView;
-
-        // Increase speed & FOV
-        float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime;
-            WalkSpeed = Mathf.Lerp(originalSpeed, originalSpeed * speedUpMultiplier, t);
-            cam.fieldOfView = Mathf.Lerp(originalFOV, originalFOV * speedUpFOVMultiplier, t);
-            yield return null;
-        }
-
-        // Wait
-        yield return new WaitForSeconds(speedUpDuration);
-
-        // Decrease speed & FOV
-        t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime;
-            WalkSpeed = Mathf.Lerp(originalSpeed * speedUpMultiplier, originalSpeed, t);
-            cam.fieldOfView = Mathf.Lerp(originalFOV * speedUpFOVMultiplier, originalFOV, t);
-            yield return null;
-        }
-
-        // Revert character model colour
-        if (DefaultMaterial != null)
-            renderer.material = DefaultMaterial;
-    }
-    
-    private IEnumerator AbsorbBlue()
-    {
-        yield return null;
     }
 }
