@@ -28,7 +28,7 @@ public class PlayerCharacter : MonoBehaviour
     [Header("Speed Power Settings")]
     public float speedUpDuration = 10f;
     public float speedUpMultiplier = 3f;
-    public float speedUpFOV = 1.5f;
+    public float speedUpFOVMultiplier = 1.5f;
 
     [Header("Jump Power Settings")]
     public float y;
@@ -106,16 +106,17 @@ public class PlayerCharacter : MonoBehaviour
     {
         switch (colour)
         {
-            case "Red": AbsorbRed(); break;
+            case "Red": StartCoroutine(AbsorbRed()); break;
             case "Yellow": StartCoroutine(AbsorbYellow()); break;
-            case "Blue": AbsorbBlue(); break;
+            case "Blue": StartCoroutine(AbsorbBlue()); break;
         }
     }
 
-    private void AbsorbRed()
+    private IEnumerator AbsorbRed()
     {
-
+        yield return null;
     }
+
     private IEnumerator AbsorbYellow()
     {
         Camera cam = mCamera.GetComponent<Camera>();
@@ -135,7 +136,7 @@ public class PlayerCharacter : MonoBehaviour
         {
             t += Time.deltaTime;
             WalkSpeed = Mathf.Lerp(originalSpeed, originalSpeed * speedUpMultiplier, t);
-            cam.fieldOfView = Mathf.Lerp(originalFOV, originalFOV * speedUpFOV, t);
+            cam.fieldOfView = Mathf.Lerp(originalFOV, originalFOV * speedUpFOVMultiplier, t);
             yield return null;
         }
 
@@ -148,7 +149,7 @@ public class PlayerCharacter : MonoBehaviour
         {
             t += Time.deltaTime;
             WalkSpeed = Mathf.Lerp(originalSpeed * speedUpMultiplier, originalSpeed, t);
-            cam.fieldOfView = Mathf.Lerp(originalFOV * speedUpFOV, originalFOV, t);
+            cam.fieldOfView = Mathf.Lerp(originalFOV * speedUpFOVMultiplier, originalFOV, t);
             yield return null;
         }
 
@@ -157,8 +158,8 @@ public class PlayerCharacter : MonoBehaviour
             renderer.material = DefaultMaterial;
     }
     
-    private void AbsorbBlue()
+    private IEnumerator AbsorbBlue()
     {
-
+        yield return null;
     }
 }
