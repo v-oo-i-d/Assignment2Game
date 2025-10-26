@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Diagnostics.Tracing;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -8,10 +10,9 @@ public class PlayerCharacter : MonoBehaviour
 {
     private CharacterController mController;
     private Vector3 mVelocity;
+    private InputAction mMoveAction, mLookAction, mJumpAction;
     private Transform mCamera;
     private float cameraPitch = 0f;
-
-    private InputAction mMoveAction, mLookAction, mJumpAction;
 
     // Feel free to change these values
     public float WalkSpeed = 5.0f;
@@ -20,6 +21,23 @@ public class PlayerCharacter : MonoBehaviour
     public float MouseSensitivity = .2f;
     public float MaxLookAngle = 89f;
     public float Gravity = -35f;
+
+    [Header("Strength Power Settings")]
+    public float x;
+
+    [Header("Speed Power Settings")]
+    public float speedUpDuration = 10f;
+    public float speedUpMultiplier = 3f;
+    public float speedUpFOV = 1.5f;
+
+    [Header("Jump Power Settings")]
+    public float y;
+
+    [Header("Player Colours")]
+    public Material BlueMaterial;
+    public Material RedMaterial;
+    public Material YellowMaterial; 
+    public Material DefaultMaterial;
 
     void Start()
     {
@@ -35,20 +53,20 @@ public class PlayerCharacter : MonoBehaviour
         mJumpAction = InputSystem.actions.FindAction("Jump");
     }
 
-    private void Jump()
-    {
-        if (mController.isGrounded)
-        {
-            mVelocity.y = JumpSpeed;
-        }
-    }
-
     void Update()
     {
         HandleLook();
         HandleMovement();
 
         if (mJumpAction.WasPerformedThisFrame()) Jump();
+    }
+
+    private void Jump()
+    {
+        if (mController.isGrounded)
+        {
+            mVelocity.y = JumpSpeed;
+        }
     }
 
     private void HandleLook()
@@ -88,15 +106,59 @@ public class PlayerCharacter : MonoBehaviour
     {
         switch (colour)
         {
-            case "Red":
-                Debug.Log("Absorb Red");
-                break;
-            case "Yellow":
-                Debug.Log("Absorb Yellow");
-                break;
-            case "Blue":
-                Debug.Log("Absorb Blue");
-                break;
+            case "Red": AbsorbRed(); break;
+            case "Yellow": StartCoroutine(AbsorbYellow()); break;
+            case "Blue": AbsorbBlue(); break;
         }
+    }
+
+    private void AbsorbRed()
+    {
+
+    }
+    private IEnumerator AbsorbYellow()
+    {
+        Camera cam = mCamera.GetComponent<Camera>();
+        SkinnedMeshRenderer renderer = transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
+
+        // Set character model colour
+        if (YellowMaterial != null)
+            renderer.material = YellowMaterial;
+
+        // Store original values
+        float originalSpeed = WalkSpeed;
+        float originalFOV = cam.fieldOfView;
+
+        // Increase speed & FOV
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime;
+            WalkSpeed = Mathf.Lerp(originalSpeed, originalSpeed * speedUpMultiplier, t);
+            cam.fieldOfView = Mathf.Lerp(originalFOV, originalFOV * speedUpFOV, t);
+            yield return null;
+        }
+
+        // Wait
+        yield return new WaitForSeconds(speedUpDuration);
+
+        // Decrease speed & FOV
+        t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime;
+            WalkSpeed = Mathf.Lerp(originalSpeed * speedUpMultiplier, originalSpeed, t);
+            cam.fieldOfView = Mathf.Lerp(originalFOV * speedUpFOV, originalFOV, t);
+            yield return null;
+        }
+
+        // Revert character model colour
+        if (DefaultMaterial != null)
+            renderer.material = DefaultMaterial;
+    }
+    
+    private void AbsorbBlue()
+    {
+
     }
 }

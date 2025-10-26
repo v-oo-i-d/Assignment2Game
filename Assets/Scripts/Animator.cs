@@ -18,8 +18,6 @@ public class PlayerAnimator : MonoBehaviour
 
     void Update()
     {
-        // Vector3 playerVelocity = GetComponent<PlayerCharacter>().GetVelocity();
-        
         float inputX = Input.GetAxisRaw("Horizontal");
         float inputZ = Input.GetAxisRaw("Vertical");
 
