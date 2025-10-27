@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ColourChanger : MonoBehaviour
 {
-    public string powerColour;
+    public PowerType powerType;
     public Color originalColour, fadedColour, changeStartingColor;
     private Color currentColour;
     public bool faded, absorbable;

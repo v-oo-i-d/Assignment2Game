@@ -96,17 +96,17 @@ public class PlayerCharacter : MonoBehaviour
     
     public Vector3 GetVelocity() => mVelocity;
 
-    public void AbsorbPower(string colour)
+    public void AbsorbPower(PowerType type)
     {
-        switch (colour)
+        switch (type)
         {
-            case "Red":
+            case PowerType.Red:
                 StartCoroutine(Powers.Red(this)); 
                 break;
-            case "Yellow":
+            case PowerType.Yellow:
                 StartCoroutine(Powers.Yellow(this)); 
                 break;
-            case "Blue":
+            case PowerType.Blue:
                 StartCoroutine(Powers.Blue(this)); 
                 break;
         }

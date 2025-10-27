@@ -67,7 +67,7 @@ public class PowerObject : MonoBehaviour
         {
             currentTime = 0f;
             resetColour = true;
-            player.AbsorbPower(colourChanger.powerColour);
+            player.AbsorbPower(colourChanger.powerType);
             absorbing = false;
         }
     }

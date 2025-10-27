@@ -2,9 +2,16 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+public enum PowerType
+{
+    Red,
+    Yellow,
+    Blue
+}
+
 public static class Powers
 {
-    private static Color DefaultPlayerColour = new(238/255f, 194/255f, 129/255f);
+    private static Color DefaultPlayerColour = new(238 / 255f, 194 / 255f, 129 / 255f);
 
     public static IEnumerator Yellow(PlayerCharacter player)
     {
@@ -49,7 +56,7 @@ public static class Powers
         renderer.material.color = DefaultPlayerColour;
     }
 
-    
+
     public static IEnumerator Red(PlayerCharacter player)
     {
         yield return null;
