@@ -23,7 +23,9 @@ public class PlayerCharacter : MonoBehaviour
     public float Gravity = -35f;
 
     [Header("Strength Power Settings")]
-    public float x;
+    //public float x;
+    public int stregnthUsesLeft = 0;
+    private InputAction mUseStrength;
 
     [Header("Speed Power Settings")]
     public float speedUpDuration = 10f;
@@ -45,6 +47,7 @@ public class PlayerCharacter : MonoBehaviour
         mMoveAction = InputSystem.actions.FindAction("Move");
         mLookAction = InputSystem.actions.FindAction("Look");
         mJumpAction = InputSystem.actions.FindAction("Jump");
+        mUseStrength = InputSystem.actions.FindAction("UseStrength");
     }
 
     void Update()
@@ -53,8 +56,15 @@ public class PlayerCharacter : MonoBehaviour
         HandleMovement();
 
         if (mJumpAction.WasPerformedThisFrame()) Jump();
+        if (mUseStrength.WasPressedThisFrame()) UseStrength();
     }
 
+    private void UseStrength()
+    {
+        if (stregnthUsesLeft != 0) { stregnthUsesLeft--; }
+        Debug.Log(stregnthUsesLeft);
+    }
+    
     private void Jump()
     {
         if (mController.isGrounded)

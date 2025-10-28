@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum PowerType
 {
@@ -59,7 +60,19 @@ public static class Powers
 
     public static IEnumerator Red(PlayerCharacter player)
     {
-        yield return null;
+        // Fetch/Set variables
+        player.stregnthUsesLeft = 3;
+        SkinnedMeshRenderer renderer = player.transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
+
+        // Change player colour
+        renderer.material.color = Color.red;
+
+        // Reset colour
+        while (player.stregnthUsesLeft != 0)
+        {
+            yield return null;
+        }
+        renderer.material.color = DefaultPlayerColour;
     }
 
     public static IEnumerator Blue(PlayerCharacter player)

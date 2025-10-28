@@ -5397,7 +5397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05ae2b281c75ae8468eaafd04dec1052, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerType: 0
+  powerType: 2
   originalColour: {r: 0, g: 0, b: 1, a: 0}
   fadedColour: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   changeStartingColor: {r: 0, g: 0, b: 1, a: 0}
