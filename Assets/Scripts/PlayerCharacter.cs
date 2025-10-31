@@ -98,6 +98,8 @@ public class PlayerCharacter : MonoBehaviour
 
     public void AbsorbPower(PowerType type)
     {
+        if (Powers.IsActive) return;
+        
         switch (type)
         {
             case PowerType.Red:

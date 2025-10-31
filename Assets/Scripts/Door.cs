@@ -5,7 +5,7 @@ public class Door : MonoBehaviour
 {
     private bool isOpen = false;
 	private bool isMoving = false;
-	public bool isLocked = false; // future use
+	public bool isLocked = false;
 
     public float smooth = 5f;
 	public float openAngle = 90f;
@@ -32,8 +32,16 @@ public class Door : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-			if (CanOpenDoor() && !isLocked) ToggleDoor();
-			else if (isLocked) StartCoroutine(LockedAnimation());
+			if (Input.GetKeyDown(KeyCode.Mouse0))
+			{
+				if (CanOpenDoor())
+				{
+					if (!isLocked)
+						ToggleDoor();
+					else
+						StartCoroutine(LockedAnimation());
+				}
+			}
         }
 
         if (isMoving) OpenAnimation();
@@ -68,7 +76,7 @@ public class Door : MonoBehaviour
 	
 	private IEnumerator LockedAnimation()
 	{
-		if (isMoving) yield break; // Prevent interrupting another animation
+		if (isMoving) yield break;
 		isMoving = true;
 
 		float wiggleDegrees = 5f;
