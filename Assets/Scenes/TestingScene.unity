@@ -5826,7 +5826,7 @@ Transform:
   m_GameObject: {fileID: 975579936}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.09, y: 1.798, z: -120.24}
+  m_LocalPosition: {x: 0.09, y: 1.798, z: -128.59}
   m_LocalScale: {x: 0.69948, y: 0.69948, z: 0.69948}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13605,6 +13605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f4cebfec839344c800cac13e2add9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   door: {fileID: 1975788923109107}
   reader: {fileID: 5973153146911108649}
   maxDistance: 5
@@ -13875,6 +13876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f4cebfec839344c800cac13e2add9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   door: {fileID: 1975788523028484}
   reader: {fileID: 6159707535525151869}
   maxDistance: 5
@@ -14139,6 +14141,7 @@ GameObject:
   - component: {fileID: 5973153146911011337}
   - component: {fileID: 5973153146910241321}
   - component: {fileID: 5973153146909110505}
+  - component: {fileID: 5973153146911108650}
   m_Layer: 0
   m_Name: RedCardReader
   m_TagString: Untagged
@@ -14146,6 +14149,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
+--- !u!65 &5973153146911108650
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5973153146911108649}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.024224851, y: 0.46085927, z: 0.40071028}
+  m_Center: {x: 0, y: -0.0000005662441, z: 0.0000011399388}
 --- !u!1 &6111806425832057780
 GameObject:
   m_ObjectHideFlags: 0
@@ -14190,6 +14214,7 @@ GameObject:
   - component: {fileID: 6159707535524862045}
   - component: {fileID: 6159707535528286333}
   - component: {fileID: 6159707535527156413}
+  - component: {fileID: 6159707535528286334}
   m_Layer: 0
   m_Name: BlueCardReader
   m_TagString: Untagged
@@ -14250,6 +14275,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6159707535525151869}
   m_Mesh: {fileID: 4300000, guid: 672113ba13572fe4da40df2796bc3611, type: 3}
+--- !u!65 &6159707535528286334
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6159707535525151869}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.024224851, y: 0.46085927, z: 0.40071028}
+  m_Center: {x: 0, y: -0.0000005662441, z: 0.0000011399388}
 --- !u!1 &6277557798507738521
 GameObject:
   m_ObjectHideFlags: 0
@@ -14261,6 +14307,7 @@ GameObject:
   - component: {fileID: 6277557798508095929}
   - component: {fileID: 6277557798510963097}
   - component: {fileID: 6277557798509996889}
+  - component: {fileID: 6277557798510963098}
   m_Layer: 0
   m_Name: YellowCardReader
   m_TagString: Untagged
@@ -14336,6 +14383,27 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6277557798507738521}
   m_Mesh: {fileID: 4300000, guid: 672113ba13572fe4da40df2796bc3611, type: 3}
+--- !u!65 &6277557798510963098
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6277557798507738521}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.024224857, y: 0.46085927, z: 0.40071037}
+  m_Center: {x: 0, y: -0.0000005662441, z: 0.0000011399391}
 --- !u!33 &6782395845099613864
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -14432,6 +14500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f4cebfec839344c800cac13e2add9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   door: {fileID: 1975788837634601}
   reader: {fileID: 6277557798507738521}
   maxDistance: 5

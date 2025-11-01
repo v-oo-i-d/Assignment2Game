@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum KeycardType { Blue, Red, Green }
+public enum KeycardType { Blue, Red, Yellow }
 
 public class Keycard : MonoBehaviour
 {
