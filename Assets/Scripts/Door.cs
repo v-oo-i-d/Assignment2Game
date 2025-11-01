@@ -11,43 +11,41 @@ public class Door : MonoBehaviour
 	public float openAngle = 90f;
 	public float maxDistance = 5f;
 
-    private Quaternion closedRotation, openRotation;
+	private Quaternion closedRotation, openRotation;
+
+	private GameObject carpet;
+	private Color originalColour;
+	private Color grayedColour = Color.gray;
 
     private void Start()
     {
         closedRotation = transform.localRotation;
 		openRotation = Quaternion.Euler(0, openAngle, 0) * closedRotation;
+
+		carpet = transform.parent.Find("Carpet").transform.gameObject;
 		
-		if (isLocked)
-		{
-			// Gray out the door to indicate it's locked
-			MeshRenderer renderer = transform.GetComponent<MeshRenderer>();
-			Color original = renderer.material.color;
-			float gray = original.grayscale;
-			renderer.material.color = new Color(gray, gray, gray, original.a);        
-		}
+		originalColour = carpet.GetComponent<Renderer>().material.color;
+
+		if (isLocked) Lock();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-			if (Input.GetKeyDown(KeyCode.Mouse0))
+		if (Input.GetKeyDown(KeyCode.Mouse0))
+		{
+			if (LookingAtDoor())
 			{
-				if (CanOpenDoor())
-				{
-					if (!isLocked)
-						ToggleDoor();
-					else
-						StartCoroutine(LockedAnimation());
-				}
+				if (!isLocked)
+					OpenDoor();
+				else
+					StartCoroutine(LockedAnimation());
 			}
-        }
+		}
 
         if (isMoving) OpenAnimation();
     }
 
-	private bool CanOpenDoor()
+	private bool LookingAtDoor()
 	{
 		Camera cam = Camera.main;
 		Ray ray = new(cam.transform.position, cam.transform.forward);
@@ -59,6 +57,12 @@ public class Door : MonoBehaviour
 		}
 
 		return false;
+	}
+
+	private void OpenDoor()
+	{
+		isOpen = !isOpen;
+		isMoving = true;
 	}
 
 	private void OpenAnimation()
@@ -79,7 +83,7 @@ public class Door : MonoBehaviour
 		if (isMoving) yield break;
 		isMoving = true;
 
-		float wiggleDegrees = 5f;
+		float wiggleDegrees = 3f;
 		float wiggleSpeed = 100f;
 		int wiggles = 2;
 
@@ -117,11 +121,18 @@ public class Door : MonoBehaviour
 		isMoving = false;
 	}
 
-	private void ToggleDoor()
+	private void ToggleLock(bool locked)
 	{
-		isOpen = !isOpen;
-		isMoving = true;
+		isLocked = locked;
+
+		MeshRenderer renderer = transform.GetComponent<MeshRenderer>();
+		float gray = originalColour.grayscale;
+
+		// Grey out if locked
+		renderer.material.color = locked ? grayedColour : originalColour;
+		carpet.GetComponent<Renderer>().material.color = locked ? grayedColour : originalColour;
 	}
 	
-	public void Lock(bool locked) => isLocked = locked;
+	public void Lock() => ToggleLock(true);
+	public void Unlock() => ToggleLock(false);
 }
