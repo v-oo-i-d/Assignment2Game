@@ -5,17 +5,18 @@ using UnityEngine.InputSystem;
 
 public enum PowerType
 {
-    Red,
-    Yellow,
-    Blue
+    Red, Yellow, Blue
 }
 
 public static class Powers
 {
+    public static bool IsActive { get; private set; } = false;
     private static Color DefaultPlayerColour = new(238 / 255f, 194 / 255f, 129 / 255f);
 
     public static IEnumerator Yellow(PlayerCharacter player)
     {
+        IsActive = true;
+
         // Fetch variables
         Camera cam = player.GetComponentInChildren<Camera>();
         SkinnedMeshRenderer renderer = player.transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
@@ -55,6 +56,8 @@ public static class Powers
 
         // Reset colour
         renderer.material.color = DefaultPlayerColour;
+
+        IsActive = false;
     }
 
 

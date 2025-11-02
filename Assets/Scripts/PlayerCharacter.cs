@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -35,6 +36,8 @@ public class PlayerCharacter : MonoBehaviour
     [Header("Jump Power Settings")]
     public float y;
 
+    private readonly HashSet<KeycardType> heldKeycards = new();
+
     void Start()
     {
         mController = GetComponent<CharacterController>();
@@ -67,10 +70,7 @@ public class PlayerCharacter : MonoBehaviour
     
     private void Jump()
     {
-        if (mController.isGrounded)
-        {
-            mVelocity.y = JumpSpeed;
-        }
+        if (mController.isGrounded) mVelocity.y = JumpSpeed;
     }
 
     private void HandleLook()
@@ -108,17 +108,23 @@ public class PlayerCharacter : MonoBehaviour
 
     public void AbsorbPower(PowerType type)
     {
+        if (Powers.IsActive) return;
+
         switch (type)
         {
             case PowerType.Red:
-                StartCoroutine(Powers.Red(this)); 
+                StartCoroutine(Powers.Red(this));
                 break;
             case PowerType.Yellow:
-                StartCoroutine(Powers.Yellow(this)); 
+                StartCoroutine(Powers.Yellow(this));
                 break;
             case PowerType.Blue:
-                StartCoroutine(Powers.Blue(this)); 
+                StartCoroutine(Powers.Blue(this));
                 break;
         }
     }
+    
+    public void PickupKeycard(Keycard keycard) => heldKeycards.Add(keycard.type);
+    public void UseKeycard(Keycard keycard) => heldKeycards.Remove(keycard.type);
+    public bool HasKeycard(Keycard keycard) => heldKeycards.Contains(keycard.type);
 }
