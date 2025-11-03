@@ -8,7 +8,7 @@ public class PowerObject : MonoBehaviour
     ColourChanger colourChanger;
     PlayerCharacter player;
     private bool insideAbsorbZone, absorbing, resetColour;
-    float currentTime, fadeTime;
+    private float currentTime, fadeTime;
     public event System.Action OnPlayerLeft;
     public event System.Action OnPlayerNearby;
 
