@@ -63,6 +63,8 @@ public static class Powers
 
     public static IEnumerator Red(PlayerCharacter player)
     {
+        IsActive = true;
+
         // Fetch/Set variables
         player.stregnthUsesLeft = 3;
         SkinnedMeshRenderer renderer = player.transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
@@ -70,16 +72,45 @@ public static class Powers
         // Change player colour
         renderer.material.color = Color.red;
 
-        // Reset colour
+        // 
         while (player.stregnthUsesLeft != 0)
         {
             yield return null;
         }
+        
+        // Reset colour
         renderer.material.color = DefaultPlayerColour;
+        IsActive = false;
     }
 
+    // Jump Boost Power
     public static IEnumerator Blue(PlayerCharacter player)
     {
-        yield return null;
+        IsActive = true;
+
+        // Fetch/set variables
+        player.bigJumpUsesLeft = 3;
+        SkinnedMeshRenderer renderer = player.transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
+        float jumpMultiplier = player.jumpMultiplier;
+
+        // Change player colour
+        renderer.material.color = Color.blue;
+
+        // Store original values
+        float originalJump = player.JumpSpeed;
+
+        // Set new jump speed
+        player.JumpSpeed = originalJump * jumpMultiplier;
+
+        // Wait until player runs out of jumps
+        while (player.bigJumpUsesLeft != 0)
+        {
+            yield return null;
+        }
+
+        // Reset player
+        renderer.material.color = DefaultPlayerColour;
+        player.JumpSpeed = originalJump;
+        IsActive = false;
     }
 }

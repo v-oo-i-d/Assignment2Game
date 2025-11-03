@@ -34,7 +34,9 @@ public class PlayerCharacter : MonoBehaviour
     public float speedUpFOVMultiplier = 1.5f;
 
     [Header("Jump Power Settings")]
-    public float y;
+    //public float y;
+    public int bigJumpUsesLeft = 0;
+    public float jumpMultiplier = 2f;
 
     private readonly HashSet<KeycardType> heldKeycards = new();
 
@@ -70,6 +72,8 @@ public class PlayerCharacter : MonoBehaviour
     
     private void Jump()
     {
+        if (bigJumpUsesLeft != 0) { bigJumpUsesLeft--; }
+        Debug.Log(JumpSpeed);
         if (mController.isGrounded) mVelocity.y = JumpSpeed;
     }
 

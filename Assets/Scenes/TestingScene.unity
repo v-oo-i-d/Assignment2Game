@@ -6678,7 +6678,8 @@ MonoBehaviour:
   speedUpDuration: 10
   speedUpMultiplier: 3
   speedUpFOVMultiplier: 1.5
-  y: 0
+  bigJumpUsesLeft: 0
+  jumpMultiplier: 2
 --- !u!143 &975579939
 CharacterController:
   m_ObjectHideFlags: 0
