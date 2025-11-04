@@ -14,7 +14,7 @@ public class Keycard : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<PlayerCharacter>();
     }
 
-    private void Update()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
@@ -31,8 +31,7 @@ public class Keycard : MonoBehaviour
 
     public void Use()
     {
-        Debug.Log(player.HasKeycard(this));
-        if (player.HasKeycard(this) == false) return;
+        if (!player.HasKeycard(this)) return;
 
         player.UseKeycard(this);
         door.GetComponent<Door>().Unlock();

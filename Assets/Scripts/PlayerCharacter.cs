@@ -39,7 +39,6 @@ public class PlayerCharacter : MonoBehaviour
     public float jumpMultiplier = 2f;
 
     private readonly HashSet<KeycardType> heldKeycards = new();
-    private Material material;
 
     void Start()
     {
@@ -49,8 +48,6 @@ public class PlayerCharacter : MonoBehaviour
         mVelocity = Vector3.zero;
 
         mCamera = transform.Find("Player Camera");
-
-        material = GetComponentInChildren<Renderer>().material;
 
         mMoveAction = InputSystem.actions.FindAction("Move");
         mLookAction = InputSystem.actions.FindAction("Look");
