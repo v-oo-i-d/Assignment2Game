@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(MeshRenderer))]
 public class Door : MonoBehaviour
 {
     private bool isOpen = false;
@@ -77,7 +78,7 @@ public class Door : MonoBehaviour
             isMoving = false;
         }
 	}
-	
+
 	private IEnumerator LockedAnimation()
 	{
 		if (isMoving) yield break;
@@ -121,18 +122,33 @@ public class Door : MonoBehaviour
 		isMoving = false;
 	}
 
-	private void ToggleLock(bool locked)
+	private IEnumerator LerpLockColor(bool locked)
 	{
+		if (!gameObject.activeInHierarchy) yield break;
+
 		isLocked = locked;
 
-		MeshRenderer renderer = transform.GetComponent<MeshRenderer>();
-		float gray = originalColour.grayscale;
+		MeshRenderer doorRenderer = GetComponent<MeshRenderer>();
+		Renderer carpetRenderer = carpet.GetComponent<Renderer>();
 
-		// Grey out if locked
-		renderer.material.color = locked ? grayedColour : originalColour;
-		carpet.GetComponent<Renderer>().material.color = locked ? grayedColour : originalColour;
+		Color startColor = doorRenderer.material.color;
+		Color endColor = locked ? grayedColour : originalColour;
+		float duration = 0.5f;
+		float t = 0f;
+
+		while (t < 1f)
+		{
+			t += Time.deltaTime / duration;
+			Color lerpedColor = Color.Lerp(startColor, endColor, t);
+			doorRenderer.material.color = lerpedColor;
+			carpetRenderer.material.color = lerpedColor;
+			yield return null;
+		}
+
+		doorRenderer.material.color = endColor;
+		carpetRenderer.material.color = endColor;
 	}
 	
-	public void Lock() => ToggleLock(true);
-	public void Unlock() => ToggleLock(false);
+	public void Lock() => StartCoroutine(LerpLockColor(true));
+	public void Unlock() => StartCoroutine(LerpLockColor(false));
 }
