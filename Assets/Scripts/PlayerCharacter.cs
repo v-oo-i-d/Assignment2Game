@@ -44,7 +44,6 @@ public class PlayerCharacter : MonoBehaviour
     void Start()
     {
         mController = GetComponent<CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked;
 
         mVelocity = Vector3.zero;
 
@@ -61,6 +60,11 @@ public class PlayerCharacter : MonoBehaviour
         HandleMovement();
 
         if (mJumpAction.WasPerformedThisFrame()) Jump();
+    }
+
+    public void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
     }
     
     private void Jump()

@@ -2,153 +2,163 @@
 using System.Collections;
 
 [RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(Renderer))]
 public class Door : MonoBehaviour
 {
     private bool isOpen = false;
-	private bool isMoving = false;
-	public bool isLocked = false;
+    private bool isMoving = false;
+    public bool isLocked = false;
 
     public float smooth = 5f;
-	public float openAngle = 90f;
-	public float maxDistance = 5f;
+    public float openAngle = 90f;
+    public float maxDistance = 5f;
 
-	private Quaternion closedRotation, openRotation;
+    private Quaternion closedRotation, openRotation;
 
-	private GameObject carpet;
-	private Color originalColour;
-	private Color grayedColour = Color.gray;
+    private GameObject carpet;
+    private Color originalColour;
+    private readonly Color grayedColour = Color.gray;
 
     private void Start()
     {
         closedRotation = transform.localRotation;
-		openRotation = Quaternion.Euler(0, openAngle, 0) * closedRotation;
+        openRotation = Quaternion.Euler(
+            transform.localEulerAngles.x,
+            transform.localEulerAngles.y + openAngle,
+            transform.localEulerAngles.z
+        );
 
-		carpet = transform.parent.Find("Carpet").transform.gameObject;
-		
-		originalColour = carpet.GetComponent<Renderer>().material.color;
+        Transform carpetTransform = transform.parent ? transform.parent.Find("Carpet") : null;
+        if (carpetTransform != null)
+            carpet = carpetTransform.gameObject;
 
-		if (isLocked) Lock();
+        // Save door’s original color
+        originalColour = GetComponent<Renderer>().material.color;
+
+        if (isLocked) Lock();
     }
 
     private void Update()
     {
-		if (Input.GetKeyDown(KeyCode.Mouse0))
-		{
-			if (LookingAtDoor())
-			{
-				if (!isLocked)
-					OpenDoor();
-				else
-					StartCoroutine(LockedAnimation());
-			}
-		}
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (LookingAtDoor())
+            {
+                if (!isLocked)
+                    OpenDoor();
+                else
+                    StartCoroutine(LockedAnimation());
+            }
+        }
 
-        if (isMoving) OpenAnimation();
+        if (isMoving)
+            OpenAnimation();
     }
 
-	private bool LookingAtDoor()
-	{
-		Camera cam = Camera.main;
-		Ray ray = new(cam.transform.position, cam.transform.forward);
+    private bool LookingAtDoor()
+    {
+        Camera cam = Camera.main;
+        if (cam == null) return false;
 
-		if (Physics.Raycast(ray, out RaycastHit hit, maxDistance))
-		{
-			// Check if we are looking at this door
-			return hit.transform == transform;
-		}
+        Ray ray = new(cam.transform.position, cam.transform.forward);
 
-		return false;
-	}
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance))
+            return hit.transform == transform;
 
-	private void OpenDoor()
-	{
-		isOpen = !isOpen;
-		isMoving = true;
-	}
+        return false;
+    }
 
-	private void OpenAnimation()
-	{
-		Quaternion targetRotation = isOpen ? openRotation : closedRotation;
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime * smooth);
+    private void OpenDoor()
+    {
+        isOpen = !isOpen;
+        isMoving = true;
+    }
 
-        // Stop moving when close enough
+    private void OpenAnimation()
+    {
+        Quaternion targetRotation = isOpen ? openRotation : closedRotation;
+        transform.localRotation = Quaternion.Slerp(
+            transform.localRotation,
+            targetRotation,
+            Time.deltaTime * smooth
+        );
+
         if (Quaternion.Angle(transform.localRotation, targetRotation) < 0.1f)
         {
             transform.localRotation = targetRotation;
             isMoving = false;
         }
-	}
+    }
 
-	private IEnumerator LockedAnimation()
-	{
-		if (isMoving) yield break;
-		isMoving = true;
+    private IEnumerator LockedAnimation()
+    {
+        if (isMoving) yield break;
+        isMoving = true;
 
-		float wiggleDegrees = 3f;
-		float wiggleSpeed = 100f;
-		int wiggles = 2;
+        float wiggleDegrees = 3f;
+        float wiggleSpeed = 100f;
+        int wiggles = 2;
 
-		Quaternion startRot = transform.localRotation;
+        Quaternion startRot = transform.localRotation;
 
-		for (int i = 0; i < wiggles; i++)
-		{
-			// Rotate one way
-			Quaternion targetA = startRot * Quaternion.Euler(0, wiggleDegrees, 0);
-			while (Quaternion.Angle(transform.localRotation, targetA) > 0.1f)
-			{
-				transform.localRotation = Quaternion.RotateTowards(
-					transform.localRotation, targetA, wiggleSpeed * Time.deltaTime);
-				yield return null;
-			}
+        for (int i = 0; i < wiggles; i++)
+        {
+            Quaternion targetA = startRot * Quaternion.Euler(0, wiggleDegrees, 0);
+            while (Quaternion.Angle(transform.localRotation, targetA) > 0.1f)
+            {
+                transform.localRotation = Quaternion.RotateTowards(
+                    transform.localRotation, targetA, wiggleSpeed * Time.deltaTime);
+                yield return null;
+            }
 
-			// Rotate the other way
-			Quaternion targetB = startRot * Quaternion.Euler(0, -wiggleDegrees, 0);
-			while (Quaternion.Angle(transform.localRotation, targetB) > 0.1f)
-			{
-				transform.localRotation = Quaternion.RotateTowards(
-					transform.localRotation, targetB, wiggleSpeed * Time.deltaTime);
-				yield return null;
-			}
-		}
+            Quaternion targetB = startRot * Quaternion.Euler(0, -wiggleDegrees, 0);
+            while (Quaternion.Angle(transform.localRotation, targetB) > 0.1f)
+            {
+                transform.localRotation = Quaternion.RotateTowards(
+                    transform.localRotation, targetB, wiggleSpeed * Time.deltaTime);
+                yield return null;
+            }
+        }
 
-		// Return to start rotation
-		while (Quaternion.Angle(transform.localRotation, startRot) > 0.1f)
-		{
-			transform.localRotation = Quaternion.RotateTowards(
-				transform.localRotation, startRot, wiggleSpeed * Time.deltaTime);
-			yield return null;
-		}
+        while (Quaternion.Angle(transform.localRotation, startRot) > 0.1f)
+        {
+            transform.localRotation = Quaternion.RotateTowards(
+                transform.localRotation, startRot, wiggleSpeed * Time.deltaTime);
+            yield return null;
+        }
 
-		isMoving = false;
-	}
+        isMoving = false;
+    }
 
-	private IEnumerator LerpLockColor(bool locked)
-	{
-		if (!gameObject.activeInHierarchy) yield break;
+    private IEnumerator LerpLockColor(bool locked)
+    {
+        if (!gameObject.activeInHierarchy) yield break;
 
-		isLocked = locked;
+        isLocked = locked;
 
-		MeshRenderer doorRenderer = GetComponent<MeshRenderer>();
-		Renderer carpetRenderer = carpet.GetComponent<Renderer>();
+        MeshRenderer doorRenderer = GetComponent<MeshRenderer>();
+        Renderer carpetRenderer = carpet ? carpet.GetComponent<Renderer>() : null;
 
-		Color startColor = doorRenderer.material.color;
-		Color endColor = locked ? grayedColour : originalColour;
-		float duration = 0.5f;
-		float t = 0f;
+        Color startColor = doorRenderer.material.color;
+        Color endColor = locked ? grayedColour : originalColour;
+        float duration = 0.5f;
+        float t = 0f;
 
-		while (t < 1f)
-		{
-			t += Time.deltaTime / duration;
-			Color lerpedColor = Color.Lerp(startColor, endColor, t);
-			doorRenderer.material.color = lerpedColor;
-			carpetRenderer.material.color = lerpedColor;
-			yield return null;
-		}
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            Color lerpedColor = Color.Lerp(startColor, endColor, t);
+            doorRenderer.material.color = lerpedColor;
+            if (carpetRenderer != null)
+                carpetRenderer.material.color = lerpedColor;
+            yield return null;
+        }
 
-		doorRenderer.material.color = endColor;
-		carpetRenderer.material.color = endColor;
-	}
-	
-	public void Lock() => StartCoroutine(LerpLockColor(true));
-	public void Unlock() => StartCoroutine(LerpLockColor(false));
+        doorRenderer.material.color = endColor;
+        if (carpetRenderer != null)
+            carpetRenderer.material.color = endColor;
+    }
+
+    public void Lock() => StartCoroutine(LerpLockColor(true));
+    public void Unlock() => StartCoroutine(LerpLockColor(false));
 }

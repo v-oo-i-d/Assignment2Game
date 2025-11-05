@@ -1,13 +1,13 @@
-using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Renderer))]
 public class ColourChanger : MonoBehaviour
 {
     public PowerType powerType;
     public Color originalColour, fadedColour, changeStartingColor;
     private Color currentColour;
     public bool faded, absorbable;
-    Renderer objectRenderer;
+    private Renderer objectRenderer;
     
     void Start()
     {
@@ -17,11 +17,6 @@ public class ColourChanger : MonoBehaviour
         changeStartingColor = originalColour;
         objectRenderer = GetComponent<Renderer>();
         objectRenderer.material.color = currentColour;
-    }
-
-    void Update()
-    {
-
     }
 
     public void SetChangeStartingColor()
@@ -42,33 +37,8 @@ public class ColourChanger : MonoBehaviour
         }
         
         currentColour = objectRenderer.material.color;
-        faded = (currentColour != originalColour);
-        absorbable = (currentColour == originalColour);
+        faded = currentColour != originalColour;
+        absorbable = currentColour == originalColour;
         
     }
-    
-    // public IEnumerator FadeToColour(Color colourChange)
-    // {
-    //     absorbable = false;
-    //     float currentTime = 0f;
-    //     while (currentTime < fadeTime)
-    //     {
-    //         objectRenderer.material.color = Color.Lerp(currentColour, colourChange, currentTime/fadeTime);
-    //         currentTime += Time.deltaTime;
-    //         yield return null; // Wait for the next frame
-    //     }
-    //     objectRenderer.material.color = colourChange; // Ensure the final color is set
-    //     currentColour = colourChange;
-
-    //     faded = (currentColour != startingColour);
-    //     if (faded)
-    //     {
-    //         StartCoroutine(FadeToColour(startingColour));
-    //     }
-
-    //     if (currentColour == startingColour)
-    //     {
-    //         absorbable = true;
-    //     }
-    // }
 }
