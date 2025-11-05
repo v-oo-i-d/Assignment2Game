@@ -2,15 +2,32 @@ using UnityEngine;
 
 public class MainDoorKeypad : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public GameObject door;
+    private bool correctCode = false;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (correctCode) OpenDoor();
+        }
+    }
+
+    public void inputCode()
+    {
         
+    }
+
+    public void OpenDoor()
+    {
+        if (!correctCode) return;
+
+        door.GetComponent<Door>().Unlock();
+        Destroy(gameObject);
     }
 }

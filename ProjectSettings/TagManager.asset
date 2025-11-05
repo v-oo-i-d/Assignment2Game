@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - PowerObject
+  - Keypad
   layers:
   - Default
   - TransparentFX
