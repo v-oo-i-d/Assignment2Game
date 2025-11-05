@@ -28,7 +28,7 @@ public class PowerObject : MonoBehaviour
         AbsorbingProcess();
         if (resetColour)
         {
-            StartCoroutine(restoreColour(fadeTime));
+            StartCoroutine(RestoreColour(fadeTime));
         }
     }
 
@@ -72,7 +72,7 @@ public class PowerObject : MonoBehaviour
         }
     }
 
-    public IEnumerator restoreColour(float fadeTime)
+    public IEnumerator RestoreColour(float fadeTime)
     {
         resetColour = false;
         colourChanger.SetChangeStartingColor();
