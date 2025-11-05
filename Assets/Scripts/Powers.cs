@@ -65,21 +65,20 @@ public static class Powers
     {
         IsActive = true;
 
-        // Fetch/Set variables
-        player.stregnthUsesLeft = 3;
+        // Fetch variables
+        float strengthDuration = player.strengthDuration;
         SkinnedMeshRenderer renderer = player.transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
 
         // Change player colour
         renderer.material.color = Color.red;
+        player.strengthened = true;
 
-        // 
-        while (player.stregnthUsesLeft != 0)
-        {
-            yield return null;
-        }
-        
+        // Wait
+        yield return new WaitForSeconds(strengthDuration);
+
         // Reset colour
         renderer.material.color = DefaultPlayerColour;
+        player.strengthened = false;
         IsActive = false;
     }
 

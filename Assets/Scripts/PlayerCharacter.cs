@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
+using Unity.VisualScripting;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -25,8 +26,8 @@ public class PlayerCharacter : MonoBehaviour
 
     [Header("Strength Power Settings")]
     //public float x;
-    public int stregnthUsesLeft = 0;
-    private InputAction mUseStrength;
+    public float strengthDuration = 10f;
+    public bool strengthened = false;
 
     [Header("Speed Power Settings")]
     public float speedUpDuration = 10f;
@@ -52,7 +53,6 @@ public class PlayerCharacter : MonoBehaviour
         mMoveAction = InputSystem.actions.FindAction("Move");
         mLookAction = InputSystem.actions.FindAction("Look");
         mJumpAction = InputSystem.actions.FindAction("Jump");
-        mUseStrength = InputSystem.actions.FindAction("UseStrength");
     }
 
     void Update()
@@ -61,13 +61,6 @@ public class PlayerCharacter : MonoBehaviour
         HandleMovement();
 
         if (mJumpAction.WasPerformedThisFrame()) Jump();
-        if (mUseStrength.WasPressedThisFrame()) UseStrength();
-    }
-
-    private void UseStrength()
-    {
-        if (stregnthUsesLeft != 0) { stregnthUsesLeft--; }
-        Debug.Log(stregnthUsesLeft);
     }
     
     private void Jump()
@@ -107,8 +100,25 @@ public class PlayerCharacter : MonoBehaviour
 
         mController.Move(mVelocity * Time.deltaTime);
     }
-    
+
     public Vector3 GetVelocity() => mVelocity;
+    
+    void OnControllerColliderHit(ControllerColliderHit collidedObject)
+    {
+        if (!strengthened) { return; } // Doesn't have strength active
+        
+        Rigidbody body = collidedObject.collider.attachedRigidbody;
+
+        // Return if object is not a rigidbody
+        if (body == null || body.isKinematic) { return; }
+        
+        Vector3 pushDirection = new Vector3(collidedObject.moveDirection.x, 0, collidedObject.moveDirection.z);
+        
+        float pushPower = 1.0f;         
+
+        // Apply force to the pushable object
+        body.AddForce(pushDirection * pushPower, ForceMode.Impulse);
+    }
 
     public void AbsorbPower(PowerType type)
     {
