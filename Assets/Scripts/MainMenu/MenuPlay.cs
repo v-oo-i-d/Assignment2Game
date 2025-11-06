@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Play : MonoBehaviour
+public class MenuPlay : MonoBehaviour
 {
     private GameObject blackFaderMenu, blackFaderPanel, mainMenu, blurMenu;
     private const float interim_delay = 1f;
