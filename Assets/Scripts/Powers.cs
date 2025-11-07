@@ -1,20 +1,25 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public enum PowerType
 {
-    Red, Yellow, Blue
+    Red, Yellow, Blue, Null
 }
 
 public static class Powers
 {
     public static bool IsActive { get; private set; } = false;
     private static Color DefaultPlayerColour = new(238 / 255f, 194 / 255f, 129 / 255f);
+    public static bool restartTimer = false;
+    [HideInInspector] public static float originalSpeed, originalFOV;
+
 
     public static IEnumerator Yellow(PlayerCharacter player)
     {
+        Debug.LogError(1);
         IsActive = true;
 
         // Fetch variables
@@ -28,23 +33,29 @@ public static class Powers
         renderer.material.color = Color.yellow;
 
         // Store original values
-        float originalSpeed = player.WalkSpeed;
-        float originalFOV = cam.fieldOfView;
 
         // Speed up gradually
         float t = 0f;
-        while (t < 1f)
+        if (!restartTimer)
         {
-            t += Time.deltaTime;
-            player.WalkSpeed = Mathf.Lerp(originalSpeed, originalSpeed * speedUpMultiplier, t);
-            cam.fieldOfView = Mathf.Lerp(originalFOV, originalFOV * speedUpFOVMultiplier, t);
-            yield return null;
+            while (t < 1f)
+            {
+                t += Time.deltaTime;
+                player.WalkSpeed = Mathf.Lerp(originalSpeed, originalSpeed * speedUpMultiplier, t);
+                cam.fieldOfView = Mathf.Lerp(originalFOV, originalFOV * speedUpFOVMultiplier, t);
+                yield return null;
+            }
         }
 
         // Wait
         yield return new WaitForSeconds(speedUpDuration);
-
+        if (restartTimer)
+        {
+            restartTimer = false;
+            yield break;
+        }
         // Slow back down
+        IsActive = false;
         t = 0f;
         while (t < 1f)
         {
@@ -57,7 +68,6 @@ public static class Powers
         // Reset colour
         renderer.material.color = DefaultPlayerColour;
 
-        IsActive = false;
     }
 
 

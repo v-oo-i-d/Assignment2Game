@@ -38,6 +38,7 @@ public class PlayerCharacter : MonoBehaviour
     //public float y;
     public int bigJumpUsesLeft = 0;
     public float jumpMultiplier = 2f;
+    private PowerType activeType = PowerType.Null;
 
     private readonly HashSet<KeycardType> heldKeycards = new();
 
@@ -52,6 +53,9 @@ public class PlayerCharacter : MonoBehaviour
         mMoveAction = InputSystem.actions.FindAction("Move");
         mLookAction = InputSystem.actions.FindAction("Look");
         mJumpAction = InputSystem.actions.FindAction("Jump");
+        Camera cam = this.GetComponentInChildren<Camera>();
+        Powers.originalSpeed = WalkSpeed;
+        Powers.originalFOV = cam.fieldOfView;
     }
 
     void Update()
@@ -126,8 +130,11 @@ public class PlayerCharacter : MonoBehaviour
 
     public void AbsorbPower(PowerType type)
     {
-        if (Powers.IsActive) return;
-
+        //if (Powers.IsActive) return;
+        if (Powers.IsActive)
+        {
+            Powers.restartTimer = true;
+        }
         switch (type)
         {
             case PowerType.Red:
