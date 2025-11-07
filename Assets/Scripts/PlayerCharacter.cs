@@ -131,10 +131,16 @@ public class PlayerCharacter : MonoBehaviour
     public void AbsorbPower(PowerType type)
     {
         //if (Powers.IsActive) return;
-        if (Powers.IsActive)
+
+        if (Powers.IsActive && type == activeType)
         {
             Powers.restartTimer = true;
         }
+        else if (Powers.IsActive)
+        {
+            return;
+        }
+        activeType = type;
         switch (type)
         {
             case PowerType.Red:
