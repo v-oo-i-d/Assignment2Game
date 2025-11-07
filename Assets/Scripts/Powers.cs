@@ -85,6 +85,11 @@ public static class Powers
 
         // Wait
         yield return new WaitForSeconds(strengthDuration);
+        if (restartTimer)
+        {
+            restartTimer = false;
+            yield break;
+        }
 
         // Reset colour
         renderer.material.color = DefaultPlayerColour;
