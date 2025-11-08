@@ -5,70 +5,73 @@ using System.Collections;
 public class PowerObject : MonoBehaviour
 {
     private InputAction mAbsorbAction;
-    ColourChanger colourChanger;
-    PlayerCharacter player;
-    private bool insideAbsorbZone, absorbing, resetColour;
-    private float currentTime, fadeTime = 2f;
+    private ColourChanger colourChanger;
+    private PlayerCharacter player;
+    private bool insideAbsorbZone, absorbing = false, resetColour;
+    private float currentTime = 0f, fadeTime = 2f;
     public event System.Action OnPlayerLeft;
     public event System.Action OnPlayerNearby;
 
-
     void Start()
     {
-        resetFadeTime();
-        currentTime = 0f;
-        absorbing = false;
+        ResetFadeTime();
         mAbsorbAction = InputSystem.actions.FindAction("Absorb");
         colourChanger = GetComponentInChildren<ColourChanger>();
         player = GameObject.FindWithTag("Player").GetComponent<PlayerCharacter>();
+
+        ParticleHandler.Initialize();
     }
 
     void Update()
     {
         AbsorbingProcess();
-        if (resetColour)
-        {
-            StartCoroutine(RestoreColour(fadeTime));
-        }
+
+        if (absorbing) ParticleHandler.UpdateParticleEmitter(player.transform, transform);
+        if (resetColour) StartCoroutine(RestoreColour(fadeTime));
     }
 
     void AbsorbingProcess()
     {
-        if (!insideAbsorbZone)
-        {
-            return;
-        }
+        if (!insideAbsorbZone) return;
 
         if (mAbsorbAction.WasPressedThisFrame() && colourChanger.absorbable)
         {
             absorbing = true;
             currentTime = 0f;
-            resetFadeTime();
+            ResetFadeTime();
+
+            ParticleHandler.StartAbsorbParticles();
         }
 
-        if (!absorbing) { return; }
-        
+        if (!absorbing) return;
+
         if (mAbsorbAction.IsPressed() && currentTime < fadeTime)
         {
+            ParticleHandler.UpdateParticleEmitter(player.transform, transform);
+
             colourChanger.FadeToColour(colourChanger.fadedColour, currentTime, fadeTime);
             currentTime += Time.deltaTime;
             return;
         }
 
-        if (mAbsorbAction.WasReleasedThisFrame()) //Stopped absorbing
+        if (mAbsorbAction.WasReleasedThisFrame())
         {
-            interruptedAbsorbing();
+            InterruptAbsorbing();
             resetColour = true;
             absorbing = false;
+
+            ParticleHandler.StopAbsorbParticles();
             return;
         }
 
-        if (currentTime >= fadeTime) //Player has drained colour and now can absorb power
+        if (currentTime >= fadeTime)
         {
             currentTime = 0f;
             resetColour = true;
             player.AbsorbPower(colourChanger.powerType);
             absorbing = false;
+
+            ParticleHandler.StopAbsorbParticles();
         }
     }
 
@@ -84,24 +87,16 @@ public class PowerObject : MonoBehaviour
         }
     }
 
-    void resetFadeTime()
+    void ResetFadeTime()
     {
         fadeTime = 2.0f;
     }
     
-    void interruptedAbsorbing()
+    void InterruptAbsorbing()
     {
         fadeTime = currentTime;
         currentTime = 0f;
     }
-
-    /*void OnTriggerEnter(Collider collider)
-    {
-        if (collider.CompareTag("Player"))
-        {
-            insideAbsorbZone = true;
-        }
-    }*/
 
     void OnTriggerStay(Collider other)
     {
@@ -126,9 +121,10 @@ public class PowerObject : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             insideAbsorbZone = false;
-            if (absorbing) { interruptedAbsorbing(); }
+            if (absorbing) { InterruptAbsorbing(); }
             resetColour = absorbing;
             absorbing = false;
+            ParticleHandler.StopAbsorbParticles();
             OnPlayerLeft.Invoke();
         }
     }

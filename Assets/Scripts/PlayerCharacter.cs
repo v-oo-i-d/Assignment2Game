@@ -16,30 +16,27 @@ public class PlayerCharacter : MonoBehaviour
     private Transform mCamera;
     private float cameraPitch = 0f;
 
-    // Feel free to change these values
     public float WalkSpeed = 5.0f;
-    public float Acceleration = 75.0f;
+    public readonly float Acceleration = 75.0f;
     public float JumpSpeed = 9.0f;
     public float MouseSensitivity = .2f;
-    public float MaxLookAngle = 89f;
-    public float Gravity = -35f;
+    public readonly float MaxLookAngle = 89f;
+    public readonly float Gravity = -35f;
 
     [Header("Strength Power Settings")]
-    //public float x;
-    public float strengthDuration = 10f;
+    public readonly float strengthDuration = 10f;
     public bool strengthened = false;
 
     [Header("Speed Power Settings")]
-    public float speedUpDuration = 10f;
-    public float speedUpMultiplier = 3f;
-    public float speedUpFOVMultiplier = 1.5f;
+    public readonly float speedUpDuration = 10f;
+    public readonly float speedUpMultiplier = 3f;
+    public readonly float speedUpFOVMultiplier = 1.5f;
 
     [Header("Jump Power Settings")]
-    //public float y;
     public int bigJumpUsesLeft = 0;
-    public float jumpMultiplier = 2f;
-    private PowerType activeType = PowerType.Null;
+    public readonly float jumpMultiplier = 2f;
 
+    private PowerType activeType = PowerType.Null;
     private readonly HashSet<KeycardType> heldKeycards = new();
 
     void Start()
@@ -53,7 +50,7 @@ public class PlayerCharacter : MonoBehaviour
         mMoveAction = InputSystem.actions.FindAction("Move");
         mLookAction = InputSystem.actions.FindAction("Look");
         mJumpAction = InputSystem.actions.FindAction("Jump");
-        Camera cam = this.GetComponentInChildren<Camera>();
+        Camera cam = GetComponentInChildren<Camera>();
         Powers.originalSpeed = WalkSpeed;
         Powers.originalFOV = cam.fieldOfView;
     }
@@ -66,15 +63,11 @@ public class PlayerCharacter : MonoBehaviour
         if (mJumpAction.WasPerformedThisFrame()) Jump();
     }
 
-    public void LockCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
+    public void LockCursor() => Cursor.lockState = CursorLockMode.Locked;
     
     private void Jump()
     {
         if (bigJumpUsesLeft != 0) { bigJumpUsesLeft--; }
-        Debug.Log(JumpSpeed);
         if (mController.isGrounded) mVelocity.y = JumpSpeed;
     }
 

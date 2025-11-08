@@ -16,10 +16,8 @@ public static class Powers
     public static bool restartTimer = false;
     [HideInInspector] public static float originalSpeed, originalFOV;
 
-
     public static IEnumerator Yellow(PlayerCharacter player)
     {
-        Debug.LogError(1);
         IsActive = true;
 
         // Fetch variables
@@ -32,8 +30,6 @@ public static class Powers
         // Change player colour
         renderer.material.color = Color.yellow;
 
-        // Store original values
-
         // Speed up gradually
         float t = 0f;
         if (!restartTimer)
@@ -41,35 +37,45 @@ public static class Powers
             while (t < 1f)
             {
                 t += Time.deltaTime;
+
                 player.WalkSpeed = Mathf.Lerp(originalSpeed, originalSpeed * speedUpMultiplier, t);
                 cam.fieldOfView = Mathf.Lerp(originalFOV, originalFOV * speedUpFOVMultiplier, t);
+
                 yield return null;
             }
         }
 
         // Wait
-        yield return new WaitForSeconds(speedUpDuration);
-        if (restartTimer)
+        float wait = 0f;
+        while (wait < speedUpDuration)
         {
-            restartTimer = false;
-            yield break;
+            if (restartTimer)
+            {
+                restartTimer = false;
+                yield break;
+            }
+            wait += Time.deltaTime;
+
+            yield return null;
         }
+
         // Slow back down
         IsActive = false;
         t = 0f;
+
         while (t < 1f)
         {
             t += Time.deltaTime;
+
             player.WalkSpeed = Mathf.Lerp(originalSpeed * speedUpMultiplier, originalSpeed, t);
             cam.fieldOfView = Mathf.Lerp(originalFOV * speedUpFOVMultiplier, originalFOV, t);
+
             yield return null;
         }
 
         // Reset colour
         renderer.material.color = DefaultPlayerColour;
-
     }
-
 
     public static IEnumerator Red(PlayerCharacter player)
     {
@@ -128,3 +134,4 @@ public static class Powers
         IsActive = false;
     }
 }
+
