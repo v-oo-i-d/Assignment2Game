@@ -34,6 +34,7 @@ public class Keycard : MonoBehaviour
         if (!player.HasKeycard(this)) return;
 
         player.UseKeycard(this);
+        SoundManager.PlaySound(SoundType.Beep);
         door.GetComponent<Door>().Unlock();
         Destroy(gameObject);
     }

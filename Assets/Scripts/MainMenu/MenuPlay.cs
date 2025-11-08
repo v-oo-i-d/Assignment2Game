@@ -26,6 +26,7 @@ public class MenuPlay : MonoBehaviour
     public void StartFade()
     {
         StartCoroutine(FadeSequence());
+        StartCoroutine(SoundManager.FilterBackgroundMusic(250f, 0.15f, fadeOut_duration + interim_delay + fadeIn_duration));
     }
 
     private IEnumerator FadeSequence()

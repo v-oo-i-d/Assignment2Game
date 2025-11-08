@@ -8,6 +8,7 @@ public class MainDoorKeypad : MonoBehaviour
     public static List<GameObject> display = new List<GameObject>(4);
     public GameObject door;
     public Material orange, purple, green, gray;
+    private bool isOpen = false;
 
     void Start()
     {
@@ -57,6 +58,7 @@ public class MainDoorKeypad : MonoBehaviour
             if (amountCorrect == 4)
             {
                 OpenDoor();
+                isOpen = true;
             }
             else
             {
@@ -66,6 +68,7 @@ public class MainDoorKeypad : MonoBehaviour
     }
     public void OpenDoor()
     {
+        if (!isOpen)
         door.GetComponent<Door>().Unlock();
     }
 }

@@ -9,9 +9,9 @@ public class Door : MonoBehaviour
     private bool isMoving = false;
     public bool isLocked = false;
 
-    public float smooth = 5f;
-    public float openAngle = 90f;
-    public float maxDistance = 5f;
+    [HideInInspector] public float smooth = 5f;
+    [HideInInspector] public float openAngle = 90f;
+    [HideInInspector] public float maxDistance = 5f;
 
     private Quaternion closedRotation, openRotation;
 
@@ -32,7 +32,6 @@ public class Door : MonoBehaviour
         if (carpetTransform != null)
             carpet = carpetTransform.gameObject;
 
-        // Save door’s original color
         originalColour = GetComponent<Renderer>().material.color;
 
         if (isLocked) Lock();
@@ -72,6 +71,7 @@ public class Door : MonoBehaviour
     {
         isOpen = !isOpen;
         isMoving = true;
+        SoundManager.PlaySound(SoundType.DoorOpen);
     }
 
     private void OpenAnimation()
@@ -118,6 +118,7 @@ public class Door : MonoBehaviour
                     transform.localRotation, targetB, wiggleSpeed * Time.deltaTime);
                 yield return null;
             }
+            SoundManager.PlaySound(SoundType.DoorLock);
         }
 
         while (Quaternion.Angle(transform.localRotation, startRot) > 0.1f)

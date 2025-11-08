@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,19 +7,23 @@ using UnityEngine.UI;
 public class MenuButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     [Header("Color Settings")]
-    public Color normalColor = Color.white;
-    public Color highlightedColor = new(0.9f, 0.9f, 0.9f);
-    public Color pressedColor = new(0.8f, 0.8f, 0.8f);
+    [SerializeField] private  Color normalColor = Color.white;
+    [SerializeField] private  Color highlightedColor = new(0.9f, 0.9f, 0.9f);
+    [SerializeField] private  Color pressedColor = new(0.8f, 0.8f, 0.8f);
 
     [Header("Hover Settings")]
     private Vector3 initialPosition;
-    public float hoverOffset = 20f;
-    public Vector3 pressedScale = new(0.95f, 0.95f, 0.95f);
-    public float transitionSpeed = 10f;
+    [SerializeField] private float hoverOffset = 20f;
+    [SerializeField] private  Vector3 pressedScale = new(0.95f, 0.95f, 0.95f);
+    [SerializeField] private  float transitionSpeed = 10f;
 
     private Image image;
     private bool isPressed = false;
     private bool isHovered = false;
+    
+    private enum ButtonState { Normal, Hovered, Pressed }
+    private ButtonState lastState = ButtonState.Normal;
+    private bool suppressHoverSound = false;
 
     private void Start()
     {
@@ -29,8 +34,30 @@ public class MenuButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private void Update()
     {
-        if (isPressed)
+        ButtonState currentState = ButtonState.Normal;
+
+        if (isPressed) currentState = ButtonState.Pressed;
+        else if (isHovered) currentState = ButtonState.Hovered;
+
+        if (currentState != lastState)
         {
+            switch (currentState)
+            {
+                case ButtonState.Hovered:
+                    if (!suppressHoverSound)
+                        SoundManager.PlaySound(SoundType.MenuHover);
+                    break;
+                case ButtonState.Pressed:
+                    SoundManager.PlaySound(SoundType.MenuClick);
+                    suppressHoverSound = true;
+                    break;
+            }
+        }
+
+        lastState = currentState;
+
+        if (isPressed)
+        {   
             // Clicking
             image.color = Color.Lerp(image.color, pressedColor, Time.deltaTime * transitionSpeed);
             transform.localScale = Vector3.Lerp(transform.localScale, pressedScale, Time.deltaTime * transitionSpeed);
@@ -55,6 +82,6 @@ public class MenuButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData eventData) => isHovered = true;
     public void OnPointerExit(PointerEventData eventData) => isHovered = false;
-    public void OnPointerDown(PointerEventData eventData) => isPressed = true;
+    public void OnPointerDown(PointerEventData eventData) { isPressed = true; suppressHoverSound = true;}
     public void OnPointerUp(PointerEventData eventData) => isPressed = false;
 }
