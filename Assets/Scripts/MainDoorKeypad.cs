@@ -67,6 +67,5 @@ public class MainDoorKeypad : MonoBehaviour
     public void OpenDoor()
     {
         door.GetComponent<Door>().Unlock();
-        Destroy(gameObject);
     }
 }
