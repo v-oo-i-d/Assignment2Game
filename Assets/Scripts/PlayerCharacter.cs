@@ -31,6 +31,7 @@ public class PlayerCharacter : MonoBehaviour
     [Header("Jump Power Settings")]
     public int bigJumpUsesLeft = 0;
     public readonly float jumpMultiplier = 2f;
+    public readonly int maxJumps = 3;
 
     private PowerType activeType = PowerType.Null;
     private readonly HashSet<KeycardType> heldKeycards = new();
@@ -63,7 +64,11 @@ public class PlayerCharacter : MonoBehaviour
     
     private void Jump()
     {
-        if (bigJumpUsesLeft != 0) { bigJumpUsesLeft--; }
+        if (bigJumpUsesLeft != 0) 
+        {
+            bigJumpUsesLeft--; 
+            PowerUI.UpdateUsesSlider(bigJumpUsesLeft, maxJumps);
+        }
         if (mController.isGrounded) mVelocity.y = JumpSpeed;
     }
 
@@ -110,7 +115,7 @@ public class PlayerCharacter : MonoBehaviour
         
         Vector3 pushDirection = new Vector3(mVelocity.x, 0, mVelocity.z).normalized;
         
-        float pushPower = 1.0f;         
+        float pushPower = 10.0f;         
 
         // Apply force to the pushable object
         body.AddForce(pushDirection * pushPower, ForceMode.Impulse);

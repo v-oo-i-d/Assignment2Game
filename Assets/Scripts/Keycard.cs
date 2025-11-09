@@ -31,7 +31,6 @@ public class Keycard : MonoBehaviour
     {
         foreach (Transform child in transform) child.transform.gameObject.SetActive(false);
         player.PickupKeycard(this);
-        Debug.Log($"keycard{type}");
         keycardImage.sprite = Resources.Load<Sprite>($"{type}Keycard");
         keycardImage.preserveAspect = true;
         keycardImage.color = new(1,1,1,1);

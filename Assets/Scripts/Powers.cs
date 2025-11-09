@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public enum PowerType
 {
@@ -18,9 +19,9 @@ public static class Powers
     private static float originalJump;
     [HideInInspector] public static float originalSpeed, originalFOV;
 
-
     public static IEnumerator Yellow(PlayerCharacter player)
     {
+        
         IsActive = true;
 
         // Fetch variables
@@ -29,6 +30,9 @@ public static class Powers
         float speedUpDuration = player.speedUpDuration;
         float speedUpMultiplier = player.speedUpMultiplier;
         float speedUpFOVMultiplier = player.speedUpFOVMultiplier;
+
+        // Start progress bar
+        PowerUI.StartDurationSlider(speedUpDuration, Color.yellow);
 
         // Change player colour
         renderer.material.color = Color.yellow;
@@ -62,18 +66,6 @@ public static class Powers
             changedAbility = false;
             yield break;
         }
-        /*float wait = 0f;
-        while (wait < speedUpDuration)
-        {
-            if (restartTimer)
-            {
-                restartTimer = false;
-                yield break;
-            }
-            wait += Time.deltaTime;
-
-            yield return null;
-        }*/
 
         // Slow back down
         IsActive = false;
@@ -100,6 +92,9 @@ public static class Powers
         // Fetch variables
         float strengthDuration = player.strengthDuration;
         SkinnedMeshRenderer renderer = player.transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
+
+        // Start progress bar
+        PowerUI.StartDurationSlider(strengthDuration, Color.red);
 
         // Change player colour
         renderer.material.color = Color.red;
@@ -131,11 +126,13 @@ public static class Powers
         player.bigJumpUsesLeft = 3;
         SkinnedMeshRenderer renderer = player.transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
 
+        PowerUI.StartUsesSlider(3, Color.blue);
+
         // Change player colour
         renderer.material.color = Color.blue;
 
         // Store original values
-        Powers.originalJump = player.JumpSpeed;
+        originalJump = player.JumpSpeed;
 
         // Set new jump speed
         player.JumpSpeed = originalJump * player.jumpMultiplier;

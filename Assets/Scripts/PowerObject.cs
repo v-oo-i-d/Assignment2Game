@@ -20,6 +20,7 @@ public class PowerObject : MonoBehaviour
         player = GameObject.FindWithTag("Player").GetComponent<PlayerCharacter>();
 
         ParticleHandler.Initialize();
+        PowerUI.InitUI();
     }
 
     void Update()
