@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -125,7 +126,9 @@ public class PlayerCharacter : MonoBehaviour
         }
         else if (Powers.IsActive)
         {
-            return;
+            Powers.changedAbility = true;
+            Powers.restartTimer = 0;
+            Powers.ClearPowers(this);
         }
         activeType = type;
         switch (type)

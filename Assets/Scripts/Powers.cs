@@ -13,8 +13,11 @@ public static class Powers
 {
     public static bool IsActive { get; private set; } = false;
     private static Color DefaultPlayerColour = new(238 / 255f, 194 / 255f, 129 / 255f);
-    public static int restartTimer = 0;
+    [HideInInspector] public static int restartTimer = 0;
+    [HideInInspector] public static bool changedAbility = false;
+    private static float originalJump;
     [HideInInspector] public static float originalSpeed, originalFOV;
+
 
     public static IEnumerator Yellow(PlayerCharacter player)
     {
@@ -52,6 +55,11 @@ public static class Powers
         if (restartTimer > 0)
         {
             restartTimer -= 1;
+            yield break;
+        }
+        if (changedAbility)
+        {
+            changedAbility = false;
             yield break;
         }
         /*float wait = 0f;
@@ -104,7 +112,10 @@ public static class Powers
             restartTimer -= 1;
             yield break;
         }
-
+        if (changedAbility) {
+            changedAbility = false;
+            yield break;
+        }
         // Reset colour
         renderer.material.color = DefaultPlayerColour;
         player.strengthened = false;
@@ -119,27 +130,63 @@ public static class Powers
         // Fetch/set variables
         player.bigJumpUsesLeft = 3;
         SkinnedMeshRenderer renderer = player.transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
-        float jumpMultiplier = player.jumpMultiplier;
 
         // Change player colour
         renderer.material.color = Color.blue;
 
         // Store original values
-        float originalJump = player.JumpSpeed;
+        Powers.originalJump = player.JumpSpeed;
 
         // Set new jump speed
-        player.JumpSpeed = originalJump * jumpMultiplier;
+        player.JumpSpeed = originalJump * player.jumpMultiplier;
 
         // Wait until player runs out of jumps
         while (player.bigJumpUsesLeft != 0)
         {
             yield return null;
         }
+        if (changedAbility)
+        {
+            changedAbility = false;
+            yield break;
+        }
+        if (restartTimer > 0)
+        {
+            restartTimer--;
+            yield break;
+        }
 
         // Reset player
         renderer.material.color = DefaultPlayerColour;
         player.JumpSpeed = originalJump;
         IsActive = false;
+    }
+    public static void ClearPowers(PlayerCharacter player)
+    {
+        SkinnedMeshRenderer playerRenderer = player.transform.Find("Mesh").GetComponent<SkinnedMeshRenderer>();
+        player.JumpSpeed = originalJump;
+        playerRenderer.material.color = DefaultPlayerColour;
+        player.strengthened = false;
+        player.bigJumpUsesLeft = 0;
+
+        if (player.WalkSpeed > originalSpeed)
+        {
+            CoroutineRunner.instance.StartCoroutine(ClearFOV(player));
+        }
+    }
+    private static IEnumerator ClearFOV(PlayerCharacter player)
+    {
+
+        Camera cam = Camera.main;
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime;
+
+            player.WalkSpeed = Mathf.Lerp(originalSpeed * player.speedUpMultiplier, originalSpeed, t);
+            cam.fieldOfView = Mathf.Lerp(originalFOV * player.speedUpFOVMultiplier, originalFOV, t);
+            yield return null;
+        }
     }
 }
 

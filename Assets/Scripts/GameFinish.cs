@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -41,7 +42,30 @@ public class GameFinish : MonoBehaviour
     void PressButton()
     {
         AudioSource door = GetComponent<AudioSource>();
+        StartCoroutine(ButtonPush());
         StartCoroutine(PlayAndWait(door, leavingRelief));
+    }
+    IEnumerator ButtonPush()
+    {
+        float t = 0.0f;
+        float duration = 0.2f;
+        Vector3 startPos = transform.localPosition;
+        Vector3 endPos = startPos + new Vector3(0.03f, 0f, 0f);
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float progress = t / duration;
+            transform.localPosition = Vector3.Lerp(startPos, endPos, progress);
+            yield return null;
+        }
+        t = 0.0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float progress = t / duration;
+            transform.localPosition = Vector3.Lerp(endPos, startPos, progress);
+            yield return null;
+        }
     }
     IEnumerator PlayAndWait(AudioSource source, AudioClip clip)
     {
