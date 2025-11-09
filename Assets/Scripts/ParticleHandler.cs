@@ -39,11 +39,12 @@ public static class ParticleHandler
         var main = ps.main;
         main.startColor = objectColor;
 
-        var renderer = particleEmitter.GetComponent<ParticleSystemRenderer>();
-        if (renderer != null)
+        if (particleEmitter.TryGetComponent<ParticleSystemRenderer>(out var renderer))
         {
             renderer.material.color = objectColor;
-        } else {
+        }
+        else
+        {
             Debug.LogWarning("ParticleSystemRenderer not found on ParticleEmitter.");
         }
 
