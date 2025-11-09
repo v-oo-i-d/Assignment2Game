@@ -127,7 +127,7 @@ public class PlayerCharacter : MonoBehaviour
 
         if (Powers.IsActive && type == activeType)
         {
-            Powers.restartTimer = true;
+            Powers.restartTimer += 1;
         }
         else if (Powers.IsActive)
         {

@@ -1,10 +1,12 @@
 using UnityEngine;
-
 public enum ButtonType {Orange, Green, Purple, Reset}
 public class MainDoorButton : MonoBehaviour
 {
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     public ButtonType buttonType;
     private float maxDistance = 7.0f;
+
+    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -20,9 +22,8 @@ public class MainDoorButton : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, maxDistance))
         {
-            if (hit.transform == transform)
+            if (hit.transform == this.transform)
             {
-                Debug.Log(buttonType);
                 return true;
             }
         }
@@ -31,12 +32,10 @@ public class MainDoorButton : MonoBehaviour
     }
     private void UseButton()
     {
-        SoundManager.PlaySound(SoundType.Beep);
         if (buttonType == ButtonType.Reset)
         {
             MainDoorKeypad.code.Clear();
-        }
-        else
+        }else
         {
             MainDoorKeypad.code.Add(buttonType);
         }

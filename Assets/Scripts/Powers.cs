@@ -13,7 +13,7 @@ public static class Powers
 {
     public static bool IsActive { get; private set; } = false;
     private static Color DefaultPlayerColour = new(238 / 255f, 194 / 255f, 129 / 255f);
-    public static bool restartTimer = false;
+    public static int restartTimer = 0;
     [HideInInspector] public static float originalSpeed, originalFOV;
 
     public static IEnumerator Yellow(PlayerCharacter player)
@@ -32,7 +32,7 @@ public static class Powers
 
         // Speed up gradually
         float t = 0f;
-        if (!restartTimer)
+        if (restartTimer == 0)
         {
             while (t < 1f)
             {
@@ -46,7 +46,15 @@ public static class Powers
         }
 
         // Wait
-        float wait = 0f;
+
+        yield return new WaitForSeconds(speedUpDuration);
+
+        if (restartTimer > 0)
+        {
+            restartTimer -= 1;
+            yield break;
+        }
+        /*float wait = 0f;
         while (wait < speedUpDuration)
         {
             if (restartTimer)
@@ -57,7 +65,7 @@ public static class Powers
             wait += Time.deltaTime;
 
             yield return null;
-        }
+        }*/
 
         // Slow back down
         IsActive = false;
@@ -91,9 +99,9 @@ public static class Powers
 
         // Wait
         yield return new WaitForSeconds(strengthDuration);
-        if (restartTimer)
+        if (restartTimer > 0)
         {
-            restartTimer = false;
+            restartTimer -= 1;
             yield break;
         }
 

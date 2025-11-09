@@ -58,7 +58,7 @@ public class MainDoorKeypad : MonoBehaviour
             if (amountCorrect == 4)
             {
                 OpenDoor();
-                isOpen = true;
+            
             }
             else
             {
