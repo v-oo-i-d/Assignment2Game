@@ -104,11 +104,10 @@ public class PlayerCharacter : MonoBehaviour
         if (!strengthened) { return; } // Doesn't have strength active
         
         Rigidbody body = collidedObject.collider.attachedRigidbody;
-
         // Return if object is not a rigidbody
         if (body == null || body.isKinematic) { return; }
         
-        Vector3 pushDirection = new Vector3(collidedObject.moveDirection.x, 0, collidedObject.moveDirection.z);
+        Vector3 pushDirection = new Vector3(mVelocity.x, 0, mVelocity.z).normalized;
         
         float pushPower = 1.0f;         
 
