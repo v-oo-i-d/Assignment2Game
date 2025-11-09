@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum KeycardType { Blue, Red, Yellow }
 
@@ -9,9 +10,12 @@ public class Keycard : MonoBehaviour
     public GameObject door, reader;
     public float maxDistance = 7f;
 
+    private Image keycardImage;
+
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerCharacter>();
+        keycardImage = GameObject.Find("GUIs").transform.Find("Keycard").transform.Find("Image").GetComponent<Image>();
     }
 
     void Update()
@@ -27,6 +31,10 @@ public class Keycard : MonoBehaviour
     {
         foreach (Transform child in transform) child.transform.gameObject.SetActive(false);
         player.PickupKeycard(this);
+        Debug.Log($"keycard{type}");
+        keycardImage.sprite = Resources.Load<Sprite>($"{type}Keycard");
+        keycardImage.preserveAspect = true;
+        keycardImage.color = new(1,1,1,1);
     }
 
     public void Use()
@@ -36,6 +44,8 @@ public class Keycard : MonoBehaviour
         player.UseKeycard(this);
         SoundManager.PlaySound(SoundType.Beep);
         door.GetComponent<Door>().Unlock();
+        keycardImage.sprite = null;
+        keycardImage.color = new(1,1,1,0);
         Destroy(gameObject);
     }
 

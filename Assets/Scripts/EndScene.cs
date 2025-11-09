@@ -3,16 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class EndScene : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    MenuPlay play;
-    MenuQuit quit;
-    Scene mainScene;
+    private MenuPlay play;
+    // private MenuQuit quit;
+    private Scene mainScene;
+
     void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    // Update is called once per frame
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         mainScene = scene;

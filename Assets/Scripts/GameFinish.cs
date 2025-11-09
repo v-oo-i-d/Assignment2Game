@@ -50,7 +50,7 @@ public class GameFinish : MonoBehaviour
         float t = 0.0f;
         float duration = 0.2f;
         Vector3 startPos = transform.localPosition;
-        Vector3 endPos = startPos + new Vector3(0.03f, 0f, 0f);
+        Vector3 endPos = startPos + new Vector3(0, 0f, -0.03f);
         while (t < duration)
         {
             t += Time.deltaTime;
@@ -71,6 +71,7 @@ public class GameFinish : MonoBehaviour
     {
         source.PlayOneShot(clip);
         yield return new WaitForSeconds(clip.length);
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("TrafficScene");
     }
 }
