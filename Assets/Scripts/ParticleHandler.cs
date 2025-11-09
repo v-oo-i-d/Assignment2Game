@@ -2,66 +2,87 @@ using UnityEngine;
 
 public static class ParticleHandler
 {
-    private static GameObject particleEmitter;
+    private static GameObject blueEmitter, redEmitter, yellowEmitter;
+    private static GameObject activeEmitter;
     private static ParticleSystem ps;
 
     public static void Initialize()
     {
-        particleEmitter = GameObject.Find("ParticleEmitter");
-        ps = particleEmitter?.GetComponent<ParticleSystem>();
+        blueEmitter = GameObject.Find("ParticleEmitterBlue");
+        redEmitter = GameObject.Find("ParticleEmitterRed");
+        yellowEmitter = GameObject.Find("ParticleEmitterYellow");
+
+        activeEmitter = null;
+        ps = null;
+    }
+
+    private static GameObject SelectEmitter(PowerType powerType)
+    {
+        return powerType switch
+        {
+            PowerType.Blue => blueEmitter,
+            PowerType.Red => redEmitter,
+            PowerType.Yellow => yellowEmitter,
+            _ => blueEmitter,
+        };
     }
 
     public static void StartAbsorbParticles()
     {
-        if (!particleEmitter || !ps) return;
+        if (!activeEmitter || !ps) return;
 
-        particleEmitter.SetActive(true);
+        activeEmitter.SetActive(true);
         ps.Play();
     }
 
     public static void StopAbsorbParticles()
     {
-        if (!particleEmitter || !ps) return;
+        if (!activeEmitter || !ps) return;
 
         ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-        particleEmitter.SetActive(false);
+        activeEmitter.SetActive(false);
     }
 
     public static void UpdateParticleEmitter(Transform player, Transform absorbingObject)
+{
+    if (!player || !absorbingObject) return;
+
+    PowerType powerType = absorbingObject.GetComponentInChildren<ColourChanger>().powerType;
+
+    // Pick emitter based on colour
+    GameObject emitter = SelectEmitter(powerType);
+    
+    if (emitter != activeEmitter)
     {
-        Debug.Log(absorbingObject);
-        if (!particleEmitter || !player || !absorbingObject) return;
-
-        // Change colour
-        Color objectColor = absorbingObject.GetComponentInChildren<ColourChanger>()?.originalColour ?? Color.white;
-        objectColor.a = 1f;
-
-        var main = ps.main;
-        main.startColor = objectColor;
-
-        if (particleEmitter.TryGetComponent<ParticleSystemRenderer>(out var renderer))
+        if (activeEmitter != null && ps != null)
         {
-            renderer.material.color = objectColor;
-        }
-        else
-        {
-            Debug.LogWarning("ParticleSystemRenderer not found on ParticleEmitter.");
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            activeEmitter.SetActive(false);
         }
 
-        // Position at absorbing object
-        particleEmitter.transform.position = absorbingObject.position;
-
-        // Rotate toward player
-        Vector3 dir = (player.position - absorbingObject.position).normalized;
-        if (dir != Vector3.zero) 
-            particleEmitter.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
-
-        // Adjust Shape module
-        if (ps)
-        {
-            var shape = ps.shape;
-            float distance = Vector3.Distance(player.position, absorbingObject.position);
-            shape.scale = new Vector3(shape.scale.x, shape.scale.y, distance);
-        }
+        activeEmitter = emitter;
+        ps = activeEmitter?.GetComponent<ParticleSystem>();
     }
+
+    if (!activeEmitter || !ps) return;
+
+    // Position at absorbing object
+    activeEmitter.transform.position = absorbingObject.position;
+
+    // Rotate toward player
+    Vector3 dir = (player.position - absorbingObject.position).normalized;
+    if (dir != Vector3.zero)
+        activeEmitter.transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+
+    // Adjust particle shape length
+    var shape = ps.shape;
+    float distance = Vector3.Distance(player.position, absorbingObject.position);
+    shape.scale = new Vector3(shape.scale.x, shape.scale.y, distance);
+
+    if (!activeEmitter.activeSelf)
+    {
+        activeEmitter.SetActive(true);
+        ps.Play();
+    }
+}
 }
