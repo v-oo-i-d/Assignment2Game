@@ -8,6 +8,7 @@ public class Door : MonoBehaviour
     private bool isOpen = false;
     private bool isMoving = false;
     public bool isLocked = false;
+    public bool lockedFromBehind;
 
     [HideInInspector] public float smooth = 5f;
     [HideInInspector] public float openAngle = 90f;
@@ -69,9 +70,12 @@ public class Door : MonoBehaviour
 
     private void OpenDoor()
     {
-        isOpen = !isOpen;
-        isMoving = true;
-        SoundManager.PlaySound(SoundType.DoorOpen);
+        if (!lockedFromBehind || Vector3.Angle(transform.forward, Camera.main.transform.forward) < 95)
+        {
+            isOpen = !isOpen;
+            isMoving = true;
+            SoundManager.PlaySound(SoundType.DoorOpen);
+        }
     }
 
     private void OpenAnimation()
